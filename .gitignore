@@ -1,0 +1,6 @@
+# Project configuration directories and files
+.idea/
+*.iml
+
+# Project output directories and files
+out/
