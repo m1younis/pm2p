@@ -36,11 +36,33 @@ public class Message {
         this.hash = this.generateHash();
     }
 
+    private String build() {
+        // A `StringBuilder` object is utilised here to position mandatory and optional message
+        // headers accordingly
+        final StringBuilder sb = new StringBuilder(
+            "Created: " + this.created + "\nFrom: " + this.sender + "\n"
+        );
+
+        // Optional headers are dealt with prior to the message contents, which are always required
+        if (this.recipient != null)
+            sb.append("To: " + this.recipient + "\n");
+        if (this.topic != null)
+            sb.append("Topic: " + this.topic + "\n");
+        if (this.subject != null)
+            sb.append("Subject: " + this.subject + "\n");
+
+        sb.append("Contents: " + this.contents.length + "\n");
+        for (String line : this.contents)
+            sb.append(line + "\n");
+
+        return sb.toString();
+    }
+
     private String generateHash() {
         try {
             final StringBuilder sb = new StringBuilder();
             final MessageDigest algo = MessageDigest.getInstance("SHA-256");
-            for (byte b : algo.digest(this.toString().getBytes(StandardCharsets.UTF_8)))
+            for (byte b : algo.digest(this.build().getBytes(StandardCharsets.UTF_8)))
                 sb.append(String.format("%02x", b));
 
             return sb.toString();
@@ -76,28 +98,5 @@ public class Message {
 
     public int getSize() {
         return this.contents.length;
-    }
-
-    @Override
-    public String toString() {
-        // A `StringBuilder` object is utilised here to position mandatory and optional message
-        // headers accordingly
-        final StringBuilder sb = new StringBuilder(
-            "Created: " + this.created + "\nFrom: " + this.sender + "\n"
-        );
-
-        // Optional headers are dealt with prior to the message contents, which are always required
-        if (this.recipient != null)
-            sb.append("To: " + this.recipient + "\n");
-        if (this.topic != null)
-            sb.append("Topic: " + this.topic + "\n");
-        if (this.subject != null)
-            sb.append("Subject: " + this.subject + "\n");
-
-        sb.append("Contents: " + this.contents.length + "\n");
-        for (String line : this.contents)
-            sb.append(line + "\n");
-
-        return sb.toString();
     }
 }
