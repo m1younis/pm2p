@@ -15,13 +15,6 @@ public class App {
             "This, is, a, message, for, testing!".split(", ")
         );
 
-        System.out.println(
-            message.getCreated() + "\n" +
-            message.getSender() + "\n" +
-            message.getRecipient() + "\n" +
-            message.getTopic() + "\n" +
-            message.getSubject() + "\n" +
-            message.getSize()
-        );
+        System.out.print(message);
     }
 }
