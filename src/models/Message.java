@@ -1,11 +1,16 @@
 
 package models;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * A class representing the app's message objects.
  */
 public class Message {
-    private String sender,
+    private String hash,
+                   sender,
                    recipient,
                    topic,
                    subject;
@@ -26,6 +31,27 @@ public class Message {
         this.topic = topic;
         this.subject = subject;
         this.contents = contents;
+        // The unique SHA-256 sum is generated only once the message body is initialised, with hash
+        // results matching those produced at https://emn178.github.io/online-tools/sha256.html
+        this.hash = this.generateHash();
+    }
+
+    private String generateHash() {
+        try {
+            final StringBuilder sb = new StringBuilder();
+            final MessageDigest algo = MessageDigest.getInstance("SHA-256");
+            for (byte b : algo.digest(this.toString().getBytes(StandardCharsets.UTF_8)))
+                sb.append(String.format("%02x", b));
+
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getHash() {
+        return this.hash;
     }
 
     public long getCreated() {
@@ -54,7 +80,7 @@ public class Message {
 
     @Override
     public String toString() {
-        // A `StringBuilder` object is utilised here to order mandatory and optional message
+        // A `StringBuilder` object is utilised here to position mandatory and optional message
         // headers accordingly
         final StringBuilder sb = new StringBuilder(
             "Created: " + this.created + "\nFrom: " + this.sender + "\n"
