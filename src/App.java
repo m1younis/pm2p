@@ -15,6 +15,6 @@ public class App {
             "This, is, a, message, for, testing!".split(", ")
         );
 
-        System.out.print(message);
+        System.out.println(message + "\nSHA-256 sum of the above: " + message.getHash());
     }
 }
