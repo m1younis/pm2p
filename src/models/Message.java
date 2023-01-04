@@ -23,7 +23,7 @@ public class Message {
                    String topic,
                    String subject,
                    String[] contents) {
-        // A more native way of generating the current UNIX Epoch time, which can also be done via
+        // A more native way of generating the current Unix Epoch time, which can also be done via
         // the `time.Instant` class
         this.created = System.currentTimeMillis() / 1000;
         this.sender = sender;
@@ -98,5 +98,20 @@ public class Message {
 
     public int getSize() {
         return this.contents.length;
+    }
+
+    public String formattedBody(char mode) {
+        // A `StringBuilder` object is used once again to insert the hash generated from the
+        // message headers and contents prior to the remainder of its body
+        // The resulting text is shortened by a line given the mode of formatting to undergo is
+        // specified as 'r'ead
+        final StringBuilder sb = new StringBuilder(this.build());
+        if (mode == 'r')
+            sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n")
+              .setLength(sb.length() - 1);
+        else if (mode == 'w')
+            sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n");
+
+        return sb.toString();
     }
 }
