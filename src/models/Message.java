@@ -36,6 +36,23 @@ public class Message {
         this.hash = this.generateHash();
     }
 
+    // The copy constructor defined below is for initialising persistently stored `Message` objects
+    public Message(String hash,
+                   String sender,
+                   String recipient,
+                   String topic,
+                   String subject,
+                   long created,
+                   String[] contents) {
+        this.hash = hash;
+        this.sender = sender;
+        this.recipient = recipient;
+        this.topic = topic;
+        this.subject = subject;
+        this.created = created;
+        this.contents = contents;
+    }
+
     private String build() {
         // A `StringBuilder` object is utilised here to position mandatory and optional message
         // headers accordingly
