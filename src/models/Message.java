@@ -68,9 +68,10 @@ public class Message {
         if (this.subject != null)
             sb.append("Subject: " + this.subject + "\n");
 
-        sb.append("Contents: " + this.contents.length + "\n");
-        for (String line : this.contents)
-            sb.append(line + "\n");
+        sb.append(
+            "Contents: " + this.contents.length + "\n" +
+            String.join("\n", this.contents) + "\n"
+        );
 
         return sb.toString();
     }
@@ -120,18 +121,11 @@ public class Message {
         return this.contents;
     }
 
-    public String formattedBody(char mode) {
+    public String getBody() {
         // A `StringBuilder` object is used once again to insert the hash generated from the
         // message headers and contents prior to the remainder of its body
-        // The resulting text is shortened by a line given the mode of formatting to undergo is
-        // specified as 'r'ead
-        final StringBuilder sb = new StringBuilder(this.build());
-        if (mode == 'r') {
-            sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n")
-              .setLength(sb.length() - 1);
-        } else if (mode == 'w')
-            sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n");
-
-        return sb.toString();
+        return new StringBuilder(this.build())
+            .insert(0, "Message-uid: SHA-256 " + this.hash + "\n")
+            .toString();
     }
 }
