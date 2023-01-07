@@ -116,8 +116,8 @@ public class Message {
         return this.subject;
     }
 
-    public int getSize() {
-        return this.contents.length;
+    public String[] getContents() {
+        return this.contents;
     }
 
     public String formattedBody(char mode) {
