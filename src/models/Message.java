@@ -77,6 +77,9 @@ public class Message {
 
     private String generateHash() {
         try {
+            // SHA-256 is the chosen hashing function - each byte in the incomplete message body
+            // (formed by invoking the `build` method) is hashed, converted to its hex equivalent
+            // then stored within a `StringBuilder` object, resulting in the corresponding sum
             final StringBuilder sb = new StringBuilder();
             final MessageDigest algo = MessageDigest.getInstance("SHA-256");
             for (byte b : algo.digest(this.build().getBytes(StandardCharsets.UTF_8)))
@@ -123,10 +126,10 @@ public class Message {
         // The resulting text is shortened by a line given the mode of formatting to undergo is
         // specified as 'r'ead
         final StringBuilder sb = new StringBuilder(this.build());
-        if (mode == 'r')
+        if (mode == 'r') {
             sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n")
               .setLength(sb.length() - 1);
-        else if (mode == 'w')
+        } else if (mode == 'w')
             sb.insert(0, "Message-uid: SHA-256 " + this.hash + "\n");
 
         return sb.toString();
