@@ -2,9 +2,12 @@
 package controllers;
 
 import models.Message;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
+import java.util.LinkedHashMap;
 
 public class MessageController {
     public static final String LOCAL_MESSAGES = "messages.txt";
@@ -22,7 +25,7 @@ public class MessageController {
     }
 
     public static Message parseStoredMessage(String message) {
-        // Variables declared for each of the `Message` object headers
+        // Variables declared for each of the stored `Message` object's headers
         String hash = null,
              sender = null,
           recipient = null,
@@ -67,5 +70,34 @@ public class MessageController {
             created,
             Arrays.copyOfRange(body, contents, body.length)
         );
+    }
+
+    public static LinkedHashMap<String, Message> loadStoredMessages() {
+        // The `LinkedHashMap` collection is chosen to store `Message` objects by way of their hash
+        // over its base `HashMap` implementation and random-access counterpart `TreeMap` as
+        // entries are chronological or "insertion-ordered"
+        final LinkedHashMap<String, Message> messages = new LinkedHashMap<>();
+
+        try {
+            final StringBuilder sb = new StringBuilder();
+            final Scanner in = new Scanner(new File(MessageController.LOCAL_MESSAGES));
+            while (in.hasNextLine()) {
+                final String line = in.nextLine();
+                sb.append(line + "\n");
+                // Since locally stored `Message` objects are separated by a blank line, the
+                // `StringBuilder` object used when parsing them must be reset before moving onto
+                // the next
+                if (line.isBlank()) {
+                    final Message message = MessageController.parseStoredMessage(sb.toString());
+                    messages.put(message.getHash(), message);
+                    sb.setLength(0);
+                }
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return messages;
     }
 }
