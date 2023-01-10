@@ -33,6 +33,8 @@ public class App {
             e.printStackTrace();
         }
 
-        System.out.print(message.getBody());
+        MessageController.loadStoredMessages().forEach(
+            (key, val) -> System.out.print(val.getBody())
+        );
     }
 }
