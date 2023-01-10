@@ -11,14 +11,13 @@ public class App {
     public static void main(String[] args) {
         // The testing `Message` object is initialised to be stored (given the local storage file
         // doesn't already exist) and displayed
-        final Message message = new Message(
-            "5103d1029e1c05d5e0a72833fbe6ed727266f1f333a64c3af2243ae6c1918b65",
-            "@m1younis",
-            null,
-            "#testing",
-            null,
-            1672766344,
-            "This, is, a, message, for, testing!".split(", ")
+        final Message message = MessageController.parseStoredMessage(
+            "Message-uid: SHA-256 5103d1029e1c05d5e0a72833fbe6ed727266f1f333a64c3af2243ae6c1918b65"
+            + "\nCreated: 1672766344"
+            + "\nFrom: @m1younis"
+            + "\nTopic: #testing"
+            + "\nContents: 6"
+            + "\nThis\nis\na\nmessage\nfor\ntesting!"
         );
 
         try {
