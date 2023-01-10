@@ -33,6 +33,8 @@ public class App {
             e.printStackTrace();
         }
 
+        // In addition to the above, other locally stored messages are listed by way of the
+        // `MessageController.loadStoredMessages` method
         MessageController.loadStoredMessages().forEach(
             (key, val) -> System.out.print(val.getBody())
         );
