@@ -121,11 +121,8 @@ public class Message {
         return this.contents;
     }
 
-    public String getBody() {
-        // A `StringBuilder` object is used once again to insert the hash generated from the
-        // message headers and contents prior to the remainder of its body
-        return new StringBuilder(this.build())
-            .insert(0, "Message-uid: SHA-256 " + this.hash + "\n")
-            .toString();
+    @Override
+    public String toString() {
+        return "Message-uid: SHA-256 " + this.hash + "\n" + this.build();
     }
 }
