@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * A class for handling operations on message objects.
@@ -75,11 +76,11 @@ public class MessageController {
         );
     }
 
-    public static LinkedHashMap<String, Message> loadStoredMessages() {
+    public static Map<String, Message> loadStoredMessages() {
         // The `LinkedHashMap` collection is chosen to store `Message` objects by way of their hash
         // over its base `HashMap` implementation and random-access counterpart `TreeMap` as
         // entries are chronologically contained or "insertion-ordered"
-        final LinkedHashMap<String, Message> messages = new LinkedHashMap<>();
+        final Map<String, Message> messages = new LinkedHashMap<>();
 
         try {
             final StringBuilder sb = new StringBuilder();
