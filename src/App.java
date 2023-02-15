@@ -35,8 +35,8 @@ public class App {
 
         // In addition to the above, other locally stored messages are listed by way of the
         // `MessageController.loadStoredMessages` method
-        MessageController.loadStoredMessages().forEach(
-            (key, val) -> System.out.print(val)
-        );
+        MessageController.loadStoredMessages()
+            .values()
+            .forEach(System.out::print);
     }
 }
