@@ -66,6 +66,10 @@ public abstract class BaseView extends JFrame {
             Color.BLACK
         );
 
+    // UI datetime label formatting set
+    private static final SimpleDateFormat
+        DATETIME_LABEL_FORMAT = new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss");
+
     // Main panel housing all UI elements
     protected JPanel panel;
 
@@ -151,15 +155,13 @@ public abstract class BaseView extends JFrame {
         return component;
     }
 
-    public void handleDateTime(int x, int y) {
+    public void handleDateTimeLabel(int x, int y) {
         final JLabel component = new JLabel();
         this.addLabel(component, 3, x, y, 200, 24);
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                component.setText(
-                    new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss").format(new Date())
-                );
+                component.setText(DATETIME_LABEL_FORMAT.format(new Date()));
             }
         }, 0, 1000);
     }
