@@ -117,12 +117,17 @@ public abstract class BaseView extends JFrame {
         this.panel.add(pane);
     }
 
-    public void addField(JTextField component, int type, int x, int y, int width, int height) {
-        // 1 => connection details field, 2 => all others
+    public void addField(
+        JTextField component,
+        boolean enable,
+        int x,
+        int y,
+        int width,
+        int height) {
         component.setBounds(x, y, width, height);
         component.setForeground(Color.BLACK);
         component.setFont(COMMS_FONT);
-        if (type == 2)
+        if (!enable)
             component.setEditable(false);
 
         this.panel.add(component);
