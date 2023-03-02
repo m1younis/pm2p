@@ -133,12 +133,11 @@ public abstract class BaseView extends JFrame {
         this.panel.add(component);
     }
 
-    public void addButton(JButton component, int type, int x, int y, int width, int height) {
-        // 1 => required at runtime, 2 => once connection is established
+    public void addButton(JButton component, boolean enable, int x, int y, int width, int height) {
         component.setBounds(x, y, width, height);
         component.setForeground(Color.BLACK);
         component.setFont(LABEL_FONT);
-        if (type == 2)
+        if (!enable)
             component.setEnabled(false);
 
         this.panel.add(component);
