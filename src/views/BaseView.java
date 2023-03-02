@@ -95,7 +95,7 @@ public abstract class BaseView extends JFrame {
             component.setVerticalAlignment(JLabel.BOTTOM);
             component.setFont(HEADING_FONT);
         } else if (type == 2) {
-            component.setVerticalAlignment(JLabel.RIGHT);
+            component.setHorizontalAlignment(JLabel.RIGHT);
             component.setFont(LABEL_FONT);
         } else if (type == 3)
             component.setFont(COMMS_FONT);
