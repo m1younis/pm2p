@@ -117,7 +117,7 @@ public abstract class BaseView extends JFrame {
         this.panel.add(pane);
     }
 
-    public void addField(
+    public void addTextField(
         JTextField component,
         boolean enable,
         int x,
