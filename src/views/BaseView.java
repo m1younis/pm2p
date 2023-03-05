@@ -29,6 +29,11 @@ import javax.swing.text.DefaultCaret;
  * populate its various elements at runtime - the dimensions, positioning and styling of a given
  * component are simultaneously considered in each, reducing code complexity in derived classes.
  * </p>
+ *
+ * <p>
+ * All have been declared with <code>protected</code> visibility, meaning they can only be visible
+ * in and invoked by subclasses.
+ * </p>
  */
 public abstract class BaseView extends JFrame {
     // Background colour and app fonts declared
