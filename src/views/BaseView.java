@@ -86,7 +86,7 @@ public abstract class BaseView extends JFrame {
         this.setContentPane(this.panel);
     }
 
-    public void addLabel(JLabel component, int type, int x, int y, int width, int height) {
+    protected void addLabel(JLabel component, int type, int x, int y, int width, int height) {
         // 1 => area heading, 2 => component label, 3 => input/output field
         component.setBounds(x, y, width, height);
         component.setForeground(Color.BLACK);
@@ -103,7 +103,7 @@ public abstract class BaseView extends JFrame {
         this.panel.add(component);
     }
 
-    public void addTextArea(JTextArea component, int x, int y, int width, int height) {
+    protected void addTextArea(JTextArea component, int x, int y, int width, int height) {
         component.setForeground(Color.BLACK);
         component.setFont(COMMS_FONT);
         component.setEditable(false);            // Text areas will be disabled on app startup
@@ -117,7 +117,7 @@ public abstract class BaseView extends JFrame {
         this.panel.add(pane);
     }
 
-    public void addTextField(
+    protected void addTextField(
         JTextField component,
         boolean enable,
         int x,
@@ -133,7 +133,13 @@ public abstract class BaseView extends JFrame {
         this.panel.add(component);
     }
 
-    public void addButton(JButton component, boolean enable, int x, int y, int width, int height) {
+    protected void addButton(
+        JButton component,
+        boolean enable,
+        int x,
+        int y,
+        int width,
+        int height) {
         component.setBounds(x, y, width, height);
         component.setForeground(Color.BLACK);
         component.setFont(LABEL_FONT);
@@ -143,7 +149,7 @@ public abstract class BaseView extends JFrame {
         this.panel.add(component);
     }
 
-    public JPanel createPanel(int type, int x, int y, int width, int height) {
+    protected JPanel createPanel(int type, int x, int y, int width, int height) {
         // 1 => connection panel, 2 => message panel, 3 => activity panel
         final JPanel component = new JPanel();
         component.setBounds(x, y, width, height);
@@ -159,7 +165,7 @@ public abstract class BaseView extends JFrame {
         return component;
     }
 
-    public void handleDateTimeLabel(int x, int y) {
+    protected void handleDateTimeLabel(int x, int y) {
         final JLabel component = new JLabel();
         this.addLabel(component, 3, x, y, 200, 24);
         new Timer().scheduleAtFixedRate(new TimerTask() {
