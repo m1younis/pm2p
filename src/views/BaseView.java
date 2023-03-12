@@ -39,7 +39,6 @@ public abstract class BaseView extends JFrame {
     // Background colour and app fonts declared
     private static final Color BASE_COLOUR = new Color(228, 228, 228);
     private static final Font BORDER_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 18),
-                             HEADING_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 16),
                                LABEL_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 14),
                                COMMS_FONT = new Font("Lucida Sans", Font.PLAIN, 11);
 
@@ -91,18 +90,14 @@ public abstract class BaseView extends JFrame {
         this.setContentPane(this.panel);
     }
 
-    protected void addLabel(JLabel component, int type, int x, int y, int width, int height) {
-        // 1 => area heading, 2 => component label, 3 => input/output field
+    protected void addLabel(JLabel component, boolean label, int x, int y, int width, int height) {
         component.setBounds(x, y, width, height);
         component.setForeground(Color.BLACK);
 
-        if (type == 1) {
-            component.setVerticalAlignment(JLabel.BOTTOM);
-            component.setFont(HEADING_FONT);
-        } else if (type == 2) {
+        if (label) {
             component.setHorizontalAlignment(JLabel.RIGHT);
             component.setFont(LABEL_FONT);
-        } else if (type == 3)
+        } else
             component.setFont(COMMS_FONT);
 
         this.panel.add(component);
@@ -172,7 +167,7 @@ public abstract class BaseView extends JFrame {
 
     protected void handleDateTimeLabel(int x, int y) {
         final JLabel component = new JLabel();
-        this.addLabel(component, 3, x, y, 200, 24);
+        this.addLabel(component, false, x, y, 200, 24);
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
