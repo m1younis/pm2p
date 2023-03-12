@@ -39,7 +39,7 @@ public abstract class BaseView extends JFrame {
     // Background colour and app fonts declared
     private static final Color BASE_COLOUR = new Color(228, 228, 228);
     private static final Font BORDER_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 18),
-                               LABEL_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 14),
+                               LABEL_FONT = new Font("Lucida Sans", Font.BOLD, 12),
                                COMMS_FONT = new Font("Lucida Sans", Font.PLAIN, 11);
 
     // Borders defined to separate each in-app panel
