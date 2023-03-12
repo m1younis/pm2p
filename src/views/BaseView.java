@@ -141,8 +141,9 @@ public abstract class BaseView extends JFrame {
         int width,
         int height) {
         component.setBounds(x, y, width, height);
+        component.setBackground(new Color(246, 246, 246));
         component.setForeground(Color.BLACK);
-        component.setFont(LABEL_FONT);
+        component.setFont(LABEL_FONT.deriveFont(11.0f));
         if (!enable)
             component.setEnabled(false);
 
