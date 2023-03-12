@@ -116,7 +116,7 @@ public abstract class BaseView extends JFrame {
         // Automatic scrolling configured
         final JScrollPane pane = new JScrollPane(component);
         pane.setBounds(x, y, width, height);
-        pane.setVerticalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         ((DefaultCaret) component.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         this.panel.add(pane);
