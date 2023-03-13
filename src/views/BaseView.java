@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.DefaultCaret;
 
@@ -129,6 +130,10 @@ public abstract class BaseView extends JFrame {
         int width,
         int height) {
         component.setBounds(x, y, width, height);
+        component.setBorder(BorderFactory.createCompoundBorder(
+            new LineBorder(Color.LIGHT_GRAY),
+            BorderFactory.createEmptyBorder(0, 2, 0, 2)
+        ));
         component.setForeground(Color.BLACK);
         component.setFont(COMMS_FONT);
         if (!enable)
