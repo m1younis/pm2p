@@ -104,6 +104,10 @@ public abstract class BaseView extends JFrame {
     }
 
     protected void addTextArea(JTextArea component, int x, int y, int width, int height) {
+        component.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(),
+            BorderFactory.createEmptyBorder(3, 2, 3, 2)
+        ));
         component.setForeground(Color.BLACK);
         component.setFont(COMMS_FONT);
         component.setEditable(false);            // Text areas will be disabled on app startup
