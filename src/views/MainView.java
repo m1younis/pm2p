@@ -32,6 +32,11 @@ public class MainView extends BaseView {
                                SEND_MESSAGE_BUTTON = new JButton("Send"),
                                SEND_REQUEST_BUTTON = new JButton("Send");
 
+    // Regex for validating connection info defined
+    private static final String IPv4_ADDRESS_REGEX =
+        "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
+                                    PORT_NUM_REGEX = "[0-9]{1,5}";
+
     public MainView() {
         super("pm2p", 225, 75);
         this.handleDateTimeLabel(10, 6);
