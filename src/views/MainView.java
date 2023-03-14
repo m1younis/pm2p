@@ -1,6 +1,7 @@
 
 package views;
 
+import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -41,6 +42,17 @@ public class MainView extends BaseView {
         super("pm2p", 225, 75);
         this.handleDateTimeLabel(10, 6);
         this.setVisible(true);
+    }
+
+    private boolean connectionFieldsAreEmpty() {
+        return IDENTIFIER_FIELD.getText().isEmpty()
+            && IP_ADDRESS_FIELD.getText().isEmpty()
+            && PORT_NUM_FIELD.getText().isEmpty();
+    }
+
+    private boolean connectionInfoIsValid() {
+        return Pattern.compile(IPv4_ADDRESS_REGEX).matcher(IP_ADDRESS_FIELD.getText()).matches()
+            && Pattern.compile(PORT_NUM_REGEX).matcher(PORT_NUM_FIELD.getText()).matches();
     }
 
     public static void main(String[] args) {
