@@ -33,6 +33,12 @@ public class MainView extends BaseView {
                                SEND_REQUEST_BUTTON = new JButton("Send");
 
     public MainView() {
-        super("pm2p", 0, 0);
+        super("pm2p", 225, 75);
+        this.handleDateTimeLabel(10, 6);
+        this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new MainView();
     }
 }
