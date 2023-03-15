@@ -3,6 +3,7 @@ package views;
 
 import java.util.regex.Pattern;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -53,6 +54,10 @@ public class MainView extends BaseView {
     private boolean connectionInfoIsValid() {
         return Pattern.compile(IPv4_ADDRESS_REGEX).matcher(IP_ADDRESS_FIELD.getText()).matches()
             && Pattern.compile(PORT_NUM_REGEX).matcher(PORT_NUM_FIELD.getText()).matches();
+    }
+
+    private void displayMessage(String message) {
+        JOptionPane.showInternalMessageDialog(this, message);
     }
 
     public static void main(String[] args) {
