@@ -3,6 +3,7 @@ package views;
 
 import java.util.regex.Pattern;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -41,8 +42,24 @@ public class MainView extends BaseView {
 
     public MainView() {
         super("pm2p", 465, 250);
+
+        // Connection info panel elements defined
+        this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
+        this.addLabel(new JLabel("IP Address"), true, 82, 94, 80, 22);
+        this.addLabel(new JLabel("Port"), true, 82, 122, 80, 22);
+
+        this.addTextField(IDENTIFIER_FIELD, true, 174, 66, 150, 22);
+        this.addTextField(IP_ADDRESS_FIELD, true, 174, 94, 150, 22);
+        this.addTextField(PORT_NUM_FIELD, true, 174, 122, 150, 22);
+
+        this.addButton(CLEAR_INFO_BUTTON, true, 104, 164, 100, 30);
+        this.addButton(CONNECT_BUTTON, true, 218, 164, 100, 30);
+        this.addButton(DISCONNECT_BUTTON, false, 332, 164, 100, 30);
+
+        // Live datetime label and connection info panel initialised
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 175));
+
         this.setVisible(true);
     }
 
