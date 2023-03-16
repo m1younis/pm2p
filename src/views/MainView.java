@@ -56,6 +56,23 @@ public class MainView extends BaseView {
         this.addButton(CONNECT_BUTTON, true, 218, 164, 100, 30);
         this.addButton(DISCONNECT_BUTTON, false, 332, 164, 100, 30);
 
+        CONNECT_BUTTON.addActionListener(e -> {
+            // Connection details validated once the "Connect" button is submitted
+            if (!this.connectionFieldsAreEmpty()) {
+                if (this.connectionInfoIsValid()) {
+                    // Supplied info is recorded after validation and used in establishing the
+                    // connection to a peer
+                    final int port = Integer.parseInt(PORT_NUM_FIELD.getText());
+                    this.displayMessage(
+                        port >= 1 && port <= 65353 ? "Still a bunch to do!" :
+                        "Port number must be between 1 and 65353 inclusive"
+                    );
+                } else
+                    this.displayMessage("Invalid IP address and/or port number submitted");
+            } else
+                this.displayMessage("Please fill in all/missing connection information");
+        });
+
         // Live datetime label and connection info panel initialised
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 175));
