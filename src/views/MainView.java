@@ -73,6 +73,13 @@ public class MainView extends BaseView {
                 this.displayMessage("Please fill in all/missing connection information");
         });
 
+        CLEAR_INFO_BUTTON.addActionListener(e -> {
+            IDENTIFIER_FIELD.setText(null);
+            IP_ADDRESS_FIELD.setText(null);
+            PORT_NUM_FIELD.setText(null);
+            IDENTIFIER_FIELD.requestFocusInWindow();
+        });
+
         // Live datetime label and connection info panel initialised
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 175));
