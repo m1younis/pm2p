@@ -82,7 +82,7 @@ public class MainView extends BaseView {
 
         // Live datetime label and connection info panel initialised
         this.handleDateTimeLabel(10, 6);
-        this.panel.add(this.createPanel(1, 0, 32, 450, 175));
+        this.panel.add(this.createPanel(1, 0, 32, 450, 150));
 
         this.setVisible(true);
     }
