@@ -80,6 +80,23 @@ public class MainView extends BaseView {
             IDENTIFIER_FIELD.requestFocusInWindow();
         });
 
+        // Message info panel elements defined
+        this.addLabel(new JLabel("Sender"), true, 30, 246, 60, 22);
+        this.addLabel(new JLabel("Recipient"), true, 232, 246, 60, 22);
+        this.addLabel(new JLabel("Topic"), true, 30, 278, 60, 22);
+        this.addLabel(new JLabel("Subject"), true, 232, 278, 60, 22);
+        this.addLabel(new JLabel("Contents"), true, 30, 316, 60, 22);
+
+        this.addTextField(SENDER_FIELD, false, 102, 246, 100, 22);
+        this.addTextField(RECIPIENT_FIELD, false, 304, 246, 100, 22);
+        this.addTextField(TOPIC_FIELD, false, 102, 278, 100, 22);
+        this.addTextField(SUBJECT_FIELD, false, 304, 278, 100, 22);
+        this.addTextArea(CONTENTS_AREA, 102, 316, 302, 176);
+
+        this.addButton(CLEAR_CONTENTS_BUTTON, false, 104, 508, 100, 30);
+        this.addButton(VIEW_SAVED_BUTTON, false, 218, 508, 100, 30);
+        this.addButton(SEND_MESSAGE_BUTTON, false, 332, 508, 100, 30);
+
         // Live datetime label initialised alongside connection and message info panels
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 150));
