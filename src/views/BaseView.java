@@ -38,7 +38,7 @@ import javax.swing.text.DefaultCaret;
  */
 public abstract class BaseView extends JFrame {
     // Background colour and app fonts declared
-    private static final Color BASE_COLOUR = new Color(228, 228, 228);
+    private static final Color BASE_COLOUR = new Color(240, 240, 240);
     private static final Font BORDER_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 18),
                                LABEL_FONT = new Font("Lucida Sans", Font.BOLD, 12),
                                COMMS_FONT = new Font("Lucida Sans", Font.PLAIN, 11);
@@ -150,7 +150,7 @@ public abstract class BaseView extends JFrame {
         int width,
         int height) {
         component.setBounds(x, y, width, height);
-        component.setBackground(new Color(246, 246, 246));
+        component.setBackground(new Color(228, 228, 228));
         component.setForeground(Color.BLACK);
         component.setFont(LABEL_FONT.deriveFont(11.0f));
         if (!enable)
