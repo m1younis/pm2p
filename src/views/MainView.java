@@ -41,7 +41,7 @@ public class MainView extends BaseView {
                                     PORT_NUM_REGEX = "[0-9]{1,5}";
 
     public MainView() {
-        super("pm2p", 465, 250);
+        super("pm2p", 465, 590);
 
         // Connection info panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
@@ -80,9 +80,10 @@ public class MainView extends BaseView {
             IDENTIFIER_FIELD.requestFocusInWindow();
         });
 
-        // Live datetime label and connection info panel initialised
+        // Live datetime label initialised alongside connection and message info panels
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 150));
+        this.panel.add(this.createPanel(2, 0, 210, 450, 316));
 
         this.setVisible(true);
     }
