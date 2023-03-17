@@ -41,7 +41,7 @@ public class MainView extends BaseView {
                                     PORT_NUM_REGEX = "[0-9]{1,5}";
 
     public MainView() {
-        super("pm2p", 465, 590);
+        super("pm2p", 916, 590);
 
         // Connection info panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
@@ -97,10 +97,11 @@ public class MainView extends BaseView {
         this.addButton(VIEW_SAVED_BUTTON, false, 218, 508, 100, 30);
         this.addButton(SEND_MESSAGE_BUTTON, false, 332, 508, 100, 30);
 
-        // Live datetime label initialised alongside connection and message info panels
+        // Live datetime label initialised alongside the connection, message and activity panels
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 150));
         this.panel.add(this.createPanel(2, 0, 210, 450, 316));
+        this.panel.add(this.createPanel(3, 450, 10, 450, 516));
 
         this.setVisible(true);
     }
