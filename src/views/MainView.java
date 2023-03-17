@@ -33,6 +33,7 @@ public class MainView extends BaseView {
                              CLEAR_CONTENTS_BUTTON = new JButton("Clear"),
                                  VIEW_SAVED_BUTTON = new JButton("View Saved"),
                                SEND_MESSAGE_BUTTON = new JButton("Send"),
+                              CLEAR_REQUEST_BUTTON = new JButton("Clear"),
                                SEND_REQUEST_BUTTON = new JButton("Send");
 
     // Regex for validating connection info defined
@@ -101,6 +102,7 @@ public class MainView extends BaseView {
         this.addTextArea(ACTIVITY_AREA, 462, 40, 496, 414);
         this.addLabel(new JLabel("Request"), true, 456, 470, 60, 22);
         this.addTextField(REQUEST_FIELD, false, 528, 470, 428, 22);
+        this.addButton(CLEAR_REQUEST_BUTTON, false, 742, 508, 100, 30);
         this.addButton(SEND_REQUEST_BUTTON, false, 856, 508, 100, 30);
 
         // Live datetime label initialised alongside the connection, message and activity panels
