@@ -44,7 +44,7 @@ public class MainView extends BaseView {
     public MainView() {
         super("pm2p", 986, 586);
 
-        // Connection info panel elements defined
+        // Connection panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
         this.addLabel(new JLabel("IP Address"), true, 82, 94, 80, 22);
         this.addLabel(new JLabel("Port"), true, 82, 122, 80, 22);
@@ -81,7 +81,7 @@ public class MainView extends BaseView {
             IDENTIFIER_FIELD.requestFocusInWindow();
         });
 
-        // Message info panel elements defined
+        // Message panel elements defined
         this.addLabel(new JLabel("Sender"), true, 30, 246, 60, 22);
         this.addLabel(new JLabel("Recipient"), true, 232, 246, 60, 22);
         this.addLabel(new JLabel("Topic"), true, 30, 278, 60, 22);
@@ -106,11 +106,11 @@ public class MainView extends BaseView {
         this.addButton(SEND_REQUEST_BUTTON, false, 856, 508, 100, 30);
 
         // Live datetime label initialised alongside the connection, message and activity panels
+        // Calling `setVisible` displays the frame once the constructor is invoked
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 150));
         this.panel.add(this.createPanel(2, 0, 210, 450, 316));
         this.panel.add(this.createPanel(3, 450, 10, 520, 516));
-
         this.setVisible(true);
     }
 
