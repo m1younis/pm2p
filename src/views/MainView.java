@@ -53,9 +53,9 @@ public class MainView extends BaseView {
         this.addTextField(IP_ADDRESS_FIELD, true, 174, 94, 150, 22);
         this.addTextField(PORT_NUM_FIELD, true, 174, 122, 150, 22);
 
-        this.addButton(CLEAR_INFO_BUTTON, true, 104, 164, 100, 30);
-        this.addButton(CONNECT_BUTTON, true, 218, 164, 100, 30);
-        this.addButton(DISCONNECT_BUTTON, false, 332, 164, 100, 30);
+        this.addButton(CLEAR_INFO_BUTTON, true, 108, 164, 100, 30);
+        this.addButton(CONNECT_BUTTON, true, 222, 164, 100, 30);
+        this.addButton(DISCONNECT_BUTTON, false, 336, 164, 100, 30);
 
         CONNECT_BUTTON.addActionListener(e -> {
             // Connection details validated once the "Connect" button is submitted
@@ -94,9 +94,9 @@ public class MainView extends BaseView {
         this.addTextField(SUBJECT_FIELD, false, 304, 278, 100, 22);
         this.addTextArea(CONTENTS_AREA, 102, 316, 302, 176);
 
-        this.addButton(CLEAR_CONTENTS_BUTTON, false, 104, 508, 100, 30);
-        this.addButton(VIEW_SAVED_BUTTON, false, 218, 508, 100, 30);
-        this.addButton(SEND_MESSAGE_BUTTON, false, 332, 508, 100, 30);
+        this.addButton(CLEAR_CONTENTS_BUTTON, false, 108, 508, 100, 30);
+        this.addButton(VIEW_SAVED_BUTTON, false, 222, 508, 100, 30);
+        this.addButton(SEND_MESSAGE_BUTTON, false, 336, 508, 100, 30);
 
         // Activity panel elements defined
         this.addTextArea(ACTIVITY_AREA, 462, 40, 496, 414);
