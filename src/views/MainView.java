@@ -127,6 +127,12 @@ public class MainView extends BaseView {
             && Pattern.compile(PORT_NUM_REGEX).matcher(PORT_NUM_FIELD.getText()).matches();
     }
 
+    private boolean connectionInfoIsValid(String addr, String port) {
+        return (addr.equals("localhost")
+            || Pattern.compile(IPv4_ADDRESS_REGEX).matcher(addr).matches())
+            && Pattern.compile(PORT_NUM_REGEX).matcher(port).matches();
+    }
+
     private void displayMessage(String message) {
         JOptionPane.showInternalMessageDialog(this.panel, message);
     }
