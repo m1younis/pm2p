@@ -121,7 +121,9 @@ public class MainView extends BaseView {
     }
 
     private boolean connectionInfoIsValid() {
-        return Pattern.compile(IPv4_ADDRESS_REGEX).matcher(IP_ADDRESS_FIELD.getText()).matches()
+        final String addr = IP_ADDRESS_FIELD.getText();
+        return (addr.equals("localhost")
+            || Pattern.compile(IPv4_ADDRESS_REGEX).matcher(addr).matches())
             && Pattern.compile(PORT_NUM_REGEX).matcher(PORT_NUM_FIELD.getText()).matches();
     }
 
