@@ -60,10 +60,12 @@ public class MainView extends BaseView {
         CONNECT_BUTTON.addActionListener(e -> {
             // Connection details validated once the "Connect" button is submitted
             if (!this.connectionFieldsAreEmpty()) {
-                if (this.connectionInfoIsValid()) {
+                final String addr = IP_ADDRESS_FIELD.getText(),
+                            iport = PORT_NUM_FIELD.getText();
+                if (this.connectionInfoIsValid(addr, iport)) {
                     // Supplied info is recorded after validation and used in establishing the
                     // connection to a peer
-                    final int port = Integer.parseInt(PORT_NUM_FIELD.getText());
+                    final int port = Integer.parseInt(iport);
                     this.displayMessage(
                         port >= 1 && port <= 65353 ? "Still a bunch to do!" :
                         "Port number must be between 1 and 65353 inclusive"
@@ -118,13 +120,6 @@ public class MainView extends BaseView {
         return IDENTIFIER_FIELD.getText().isEmpty()
             && IP_ADDRESS_FIELD.getText().isEmpty()
             && PORT_NUM_FIELD.getText().isEmpty();
-    }
-
-    private boolean connectionInfoIsValid() {
-        final String addr = IP_ADDRESS_FIELD.getText();
-        return (addr.equals("localhost")
-            || Pattern.compile(IPv4_ADDRESS_REGEX).matcher(addr).matches())
-            && Pattern.compile(PORT_NUM_REGEX).matcher(PORT_NUM_FIELD.getText()).matches();
     }
 
     private boolean connectionInfoIsValid(String addr, String port) {
