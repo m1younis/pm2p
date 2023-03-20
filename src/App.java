@@ -25,9 +25,9 @@ public class App {
             if (new File(MessageController.LOCAL_MESSAGES).createNewFile()) {
                 MessageController.storeMessage(message, false);
                 System.out.printf(
-                    "`%s` created with Message-uid: SHA-256 %s\n",
+                    "`%s` created with initial message (%s)\n",
                     MessageController.LOCAL_MESSAGES,
-                    message.getHash()
+                    message.getHash().substring(0, 7)
                 );
             }
         } catch (IOException e) {
