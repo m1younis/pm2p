@@ -53,8 +53,8 @@ public class MainView extends BaseView {
         this.addTextField(IP_ADDRESS_FIELD, true, 174, 94, 150, 22);
         this.addTextField(PORT_NUM_FIELD, true, 174, 122, 150, 22);
 
-        this.addButton(CLEAR_INFO_BUTTON, true, 108, 164, 100, 30);
-        this.addButton(CONNECT_BUTTON, true, 222, 164, 100, 30);
+        this.addButton(CLEAR_INFO_BUTTON, true, 102, 164, 100, 30);
+        this.addButton(CONNECT_BUTTON, true, 219, 164, 100, 30);
         this.addButton(DISCONNECT_BUTTON, false, 336, 164, 100, 30);
 
         CONNECT_BUTTON.addActionListener(e -> {
@@ -96,15 +96,15 @@ public class MainView extends BaseView {
         this.addTextField(SUBJECT_FIELD, false, 304, 278, 100, 22);
         this.addTextArea(CONTENTS_AREA, 102, 316, 302, 176);
 
-        this.addButton(CLEAR_CONTENTS_BUTTON, false, 108, 508, 100, 30);
-        this.addButton(VIEW_SAVED_BUTTON, false, 222, 508, 100, 30);
+        this.addButton(CLEAR_CONTENTS_BUTTON, false, 102, 508, 100, 30);
+        this.addButton(VIEW_SAVED_BUTTON, false, 219, 508, 100, 30);
         this.addButton(SEND_MESSAGE_BUTTON, false, 336, 508, 100, 30);
 
         // Activity panel elements defined
         this.addTextArea(ACTIVITY_AREA, 462, 40, 496, 414);
         this.addLabel(new JLabel("Request"), true, 456, 470, 60, 22);
         this.addTextField(REQUEST_FIELD, false, 528, 470, 428, 22);
-        this.addButton(CLEAR_REQUEST_BUTTON, false, 742, 508, 100, 30);
+        this.addButton(CLEAR_REQUEST_BUTTON, false, 739, 508, 100, 30);
         this.addButton(SEND_REQUEST_BUTTON, false, 856, 508, 100, 30);
 
         // Live datetime label initialised alongside the connection, message and activity panels
