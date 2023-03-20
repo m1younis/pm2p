@@ -67,8 +67,8 @@ public class MainView extends BaseView {
                     // connection to a peer
                     final int port = Integer.parseInt(iport);
                     this.displayMessage(
-                        port >= 1 && port <= 65353 ? "Still a bunch to do!" :
-                        "Port number must be between 1 and 65353 inclusive"
+                        port >= 1 && port <= 65535 ? "Still a bunch to do!" :
+                        "Port number must be between 1 and 65535 inclusive"
                     );
                 } else
                     this.displayMessage("Invalid IP address and/or port number submitted");
