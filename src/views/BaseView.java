@@ -3,6 +3,8 @@ package views;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -37,8 +39,9 @@ import javax.swing.text.DefaultCaret;
  * </p>
  */
 public abstract class BaseView extends JFrame {
-    // Background colour and app fonts declared
-    private static final Color BASE_COLOUR = new Color(228, 228, 228);
+    // App and button background colours declared along with UI fonts
+    private static final Color BASE_COLOUR = new Color(240, 240, 240),
+                             BUTTON_COLOUR = new Color(228, 228, 228);
     private static final Font BORDER_FONT = new Font("Franklin Gothic Medium", Font.PLAIN, 18),
                                LABEL_FONT = new Font("Lucida Sans", Font.BOLD, 12),
                                COMMS_FONT = new Font("Lucida Sans", Font.PLAIN, 11);
@@ -150,11 +153,39 @@ public abstract class BaseView extends JFrame {
         int width,
         int height) {
         component.setBounds(x, y, width, height);
-        component.setBackground(new Color(246, 246, 246));
+        component.setBackground(BUTTON_COLOUR);
         component.setForeground(Color.BLACK);
+        component.setFocusPainted(false);
         component.setFont(LABEL_FONT.deriveFont(11.0f));
         if (!enable)
             component.setEnabled(false);
+
+        // Hover effect added by way of the `MouseEvent` and `MouseListener` classes
+        component.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {}
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (component.isEnabled())
+                    component.setBackground(BUTTON_COLOUR);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                if (component.isEnabled())
+                    component.setBackground(new Color(220, 237, 250));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (component.isEnabled())
+                    component.setBackground(BUTTON_COLOUR);
+            }
+        });
 
         this.panel.add(component);
     }

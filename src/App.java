@@ -1,6 +1,7 @@
 
 import controllers.MessageController;
 import models.Message;
+import views.MainView;
 import java.io.File;
 import java.io.IOException;
 
@@ -33,10 +34,6 @@ public class App {
             e.printStackTrace();
         }
 
-        // In addition to the above, other locally stored messages are listed by way of the
-        // `MessageController.loadStoredMessages` method
-        MessageController.loadStoredMessages()
-            .values()
-            .forEach(System.out::print);
+        new MainView();
     }
 }
