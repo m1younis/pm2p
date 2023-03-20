@@ -131,8 +131,4 @@ public class MainView extends BaseView {
     private void displayMessage(String message) {
         JOptionPane.showInternalMessageDialog(this.panel, message);
     }
-
-    public static void main(String[] args) {
-        new MainView();
-    }
 }
