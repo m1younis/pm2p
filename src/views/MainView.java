@@ -60,9 +60,9 @@ public class MainView extends BaseView {
         CONNECT_BUTTON.addActionListener(e -> {
             // Connection details validated once the "Connect" button is submitted
             if (!this.connectionFieldsAreEmpty()) {
-                final String addr = IP_ADDRESS_FIELD.getText(),
+                final String host = IP_ADDRESS_FIELD.getText(),
                             iport = PORT_NUM_FIELD.getText();
-                if (this.connectionInfoIsValid(addr, iport)) {
+                if (this.connectionInfoIsValid(host, iport)) {
                     // Supplied info is recorded after validation and used in establishing the
                     // connection to a peer
                     final int port = Integer.parseInt(iport);
