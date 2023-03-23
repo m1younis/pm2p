@@ -1,6 +1,7 @@
 
 package views;
 
+import controllers.ClientController;
 import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -43,6 +44,8 @@ public class MainView extends BaseView {
 
     public MainView() {
         super("pm2p", 986, 586);
+
+        new ClientController();      // Client handler startup
 
         // Connection panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
