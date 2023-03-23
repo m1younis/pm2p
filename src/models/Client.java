@@ -17,10 +17,14 @@ public class Client extends Thread {
     private static final String PROTOCOL_ACK_MESSAGE =
         String.format("ACK? PM/%d.0 ", MIN_PROTOCOL_VERSION);
 
-    private Socket socket;      // Client's connection socket
+    // Client's connection socket fields
+    private Socket socket;
+    private String address,
+                identifier;
 
     public Client(Socket socket) {
         this.socket = socket;
+        this.address = socket.getRemoteSocketAddress().toString();
     }
 
     @Override
@@ -34,27 +38,25 @@ public class Client extends Thread {
 
             // Protocol acknowledgement MUST occur prior to any communication
             writer.println(PROTOCOL_ACK_MESSAGE + this.socket.getLocalSocketAddress());
-            String request = reader.readLine();
-            final String[] meta = request.split("\\s+");
+            final String[] meta = reader.readLine().split("\\s+");
             if (meta.length == 3 && meta[0].equals("ACK?")) {
                 final int protocol = (int) Double.parseDouble(meta[1].split("/")[1]);
+                this.identifier = meta[2];
                 if (protocol >= MIN_PROTOCOL_VERSION)
-                    writer.printf("Hi %s! (%s)\n", meta[2], this.socket.getRemoteSocketAddress());
+                    writer.printf("%s (%s) joined\n", this.identifier, this.address);
             }
 
             // Streams are closed promptly once communication ends
+            writer.printf("%s (%s) left\n", this.identifier, this.address);
             reader.close();
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Client socket is closed last
+            // Client connection socket is closed last
             try {
                 this.socket.close();
-                System.out.printf(
-                    "Client at %s disconnected\n",
-                    this.socket.getRemoteSocketAddress()
-                );
+                System.out.printf("Client at %s disconnected\n", this.address);
             } catch (IOException e) {
                 e.printStackTrace();
             }
