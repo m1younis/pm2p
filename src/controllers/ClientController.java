@@ -27,7 +27,7 @@ public class ClientController extends Thread {
 
     @Override
     public void run() {
-        System.out.printf("Server started at %d...", DEFAULT_PORT);
+        System.out.printf("Server started at %d...\n", DEFAULT_PORT);
         try {
             while (true) {
                 // The `accept` method below listens for incoming clients on the server port
@@ -35,7 +35,7 @@ public class ClientController extends Thread {
                 this.socket = this.server.accept();
                 new Client(this.socket).start();
                 System.out.printf(
-                    "Client connected from %s",
+                    "Client connected from %s\n",
                     this.socket.getRemoteSocketAddress()
                 );
             }
