@@ -45,7 +45,7 @@ public class MainView extends BaseView {
     public MainView() {
         super("pm2p", 986, 586);
 
-        new ClientController();      // Client handler startup
+        new ClientController(this);      // Client handler startup
 
         // Connection panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
