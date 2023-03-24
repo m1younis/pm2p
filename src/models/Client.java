@@ -41,17 +41,26 @@ public class Client extends Thread {
                 new PrintWriter(this.socket.getOutputStream(), true);
 
             // Protocol acknowledgement MUST occur prior to any communication
-            writer.println(PROTOCOL_ACK_MESSAGE + this.socket.getLocalSocketAddress());
-            final String[] meta = reader.readLine().split("\\s+");
+            String message = PROTOCOL_ACK_MESSAGE + this.socket.getLocalAddress();
+            writer.println(message);
+            this.ui.updateActivityArea(message);
+
+            String request = reader.readLine();
+            final String[] meta = request.split("\\s+");
             if (meta.length == 3 && meta[0].equals("ACK?")) {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
-                if (protocol >= MIN_PROTOCOL_VERSION)
-                    writer.printf("%s (%s) joined\n", this.identifier, this.address);
+                if (protocol >= MIN_PROTOCOL_VERSION) {
+                    message = String.format("%s (%s) joined", this.identifier, this.address);
+                    writer.println(message);
+                    this.ui.updateActivityArea(String.join("\n", request, message));
+                }
             }
 
             // Streams are closed promptly once communication ends
-            writer.printf("%s (%s) left\n", this.identifier, this.address);
+            message = String.format("%s (%s) left", this.identifier, this.address);
+            writer.println(message);
+            this.ui.updateActivityArea(message);
             reader.close();
             writer.close();
         } catch (Exception e) {
