@@ -134,4 +134,8 @@ public class MainView extends BaseView {
     private void displayMessage(String message) {
         JOptionPane.showInternalMessageDialog(this.panel, message);
     }
+
+    public void updateActivityArea(String message) {
+        ACTIVITY_AREA.append(message + "\n");
+    }
 }
