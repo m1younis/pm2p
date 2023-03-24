@@ -37,7 +37,7 @@ public class ClientController extends Thread {
                 // The `accept` method below listens for incoming clients on the server port
                 // specified above
                 this.socket = this.server.accept();
-                new Client(this.socket).start();
+                new Client(this.socket, this.ui).start();
                 System.out.printf(
                     "Client connected from %s\n",
                     this.socket.getRemoteSocketAddress()
