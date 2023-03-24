@@ -15,7 +15,7 @@ public class Client extends Thread {
     // PM communication protocol constants
     private static final int MIN_PROTOCOL_VERSION = 1;
     private static final String PROTOCOL_ACK_MESSAGE =
-        String.format("ACK? PM/%d.0 ", MIN_PROTOCOL_VERSION);
+        String.format("ACK? PM/%d ", MIN_PROTOCOL_VERSION);
 
     // Client's connection socket fields
     private Socket socket;
@@ -40,7 +40,7 @@ public class Client extends Thread {
             writer.println(PROTOCOL_ACK_MESSAGE + this.socket.getLocalSocketAddress());
             final String[] meta = reader.readLine().split("\\s+");
             if (meta.length == 3 && meta[0].equals("ACK?")) {
-                final int protocol = (int) Double.parseDouble(meta[1].split("/")[1]);
+                final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
                 if (protocol >= MIN_PROTOCOL_VERSION)
                     writer.printf("%s (%s) joined\n", this.identifier, this.address);
