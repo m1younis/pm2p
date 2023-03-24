@@ -2,6 +2,7 @@
 package controllers;
 
 import models.Client;
+import views.MainView;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,7 +17,10 @@ public class ClientController extends Thread {
     private ServerSocket server;
     private Socket socket;
 
-    public ClientController() {
+    private MainView ui;               // Allows the handler and UI to interact
+
+    public ClientController(MainView ui) {
+        this.ui = ui;
         try {
             this.server = new ServerSocket(DEFAULT_PORT);
             this.start();      // Invokes the `run` method's implementation
