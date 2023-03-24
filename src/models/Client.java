@@ -1,6 +1,7 @@
 
 package models;
 
+import views.MainView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,9 +23,12 @@ public class Client extends Thread {
     private String address,
                 identifier;
 
-    public Client(Socket socket) {
+    private MainView ui;        // Allows the client thread and UI to interact
+
+    public Client(Socket socket, MainView ui) {
         this.socket = socket;
         this.address = socket.getRemoteSocketAddress().toString();
+        this.ui = ui;
     }
 
     @Override
