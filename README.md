@@ -52,5 +52,6 @@ remaining request implementations are described as follows:
 
 - `QUIT!` – (politely) ends the communication between two peers without giving a response.
 
+The `HELP?` request provides a summary of all supported requests in a similar fashion to the above.
 If an invalid request is made, the sending peer's connection socket is closed and their interaction
 ends immediately.
