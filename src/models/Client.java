@@ -42,6 +42,7 @@ public class Client extends Thread {
 
             // Protocol acknowledgement MUST occur prior to any communication
             String message = PROTOCOL_ACK_MESSAGE + this.socket.getLocalAddress();
+            boolean acknowledged = false;
             writer.println(message);
             this.ui.updateActivityArea(message);
 
@@ -51,16 +52,43 @@ public class Client extends Thread {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
                 if (protocol >= MIN_PROTOCOL_VERSION) {
+                    acknowledged = true;
                     message = String.format("%s (%s) joined", this.identifier, this.address);
                     writer.println(message);
                     this.ui.updateActivityArea(String.join("\n", request, message));
                 }
             }
 
-            // Streams are closed promptly once communication ends
-            message = String.format("%s (%s) left", this.identifier, this.address);
-            writer.println(message);
-            this.ui.updateActivityArea(message);
+            // Requests and responses can now be handled as the protocol is acknowledged between
+            // the client and peer
+            while (acknowledged) {
+                request = reader.readLine();
+                String response = null;
+                if (request.equals("QUIT!"))
+                    acknowledged = false;
+                else if (request.equals("TIME?"))
+                    response = String.format("NOW %d", System.currentTimeMillis() / 1000);
+                else
+                    break;
+
+                if (response != null) {
+                    writer.println(response);
+                    this.ui.updateActivityArea(String.join("\n", request, response));
+                } else
+                    this.ui.updateActivityArea(request);
+            }
+
+            // Streams are closed promptly once communication ends or the protocol is broken due to
+            // an invalid request
+            if (this.identifier != null) {
+                if (acknowledged) {
+                    this.ui.updateActivityArea(request);
+                    message = String.format("%s (%s) was kicked", this.identifier, this.address);
+                } else
+                    message = String.format("%s (%s) left", this.identifier, this.address);
+                writer.println(message);
+                this.ui.updateActivityArea(message);
+            }
             reader.close();
             writer.close();
         } catch (Exception e) {
