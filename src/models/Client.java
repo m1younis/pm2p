@@ -17,6 +17,12 @@ public class Client extends Thread {
     private static final int MIN_PROTOCOL_VERSION = 1;
     private static final String PROTOCOL_ACK_MESSAGE =
         String.format("ACK? PM/%d ", MIN_PROTOCOL_VERSION);
+    private static final String[] PROTOCOL_HELP_MESSAGE = {
+        "Supported requests",
+        "   HELP?\tDisplays this message",
+        "   TIME?\tReturns the current time (Unix Epoch) at the receiving peer",
+        "   QUIT!\tEnds the communication between two peers politely"
+    };
 
     // Client's connection socket fields
     private Socket socket;
@@ -68,6 +74,8 @@ public class Client extends Thread {
                     acknowledged = false;
                 else if (request.equals("TIME?"))
                     response = String.format("NOW %d", System.currentTimeMillis() / 1000);
+                else if (request.equals("HELP?"))
+                    response = String.join("\n", PROTOCOL_HELP_MESSAGE);
                 else
                     break;
 
