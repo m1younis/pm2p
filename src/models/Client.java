@@ -54,7 +54,7 @@ public class Client extends Thread {
 
             String request = reader.readLine();
             final String[] meta = request.split("\\s+");
-            if (meta.length == 3 && meta[0].equals("ACK?")) {
+            if (meta.length == 3 && request.startsWith("ACK? PM/")) {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
                 if (protocol >= MIN_PROTOCOL_VERSION) {
