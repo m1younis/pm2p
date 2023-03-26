@@ -110,7 +110,7 @@ public abstract class BaseView extends JFrame {
     protected void addTextArea(JTextArea component, int x, int y, int width, int height) {
         component.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createEmptyBorder(),
-            BorderFactory.createEmptyBorder(3, 2, 3, 2)
+            BorderFactory.createEmptyBorder(3, 4, 3, 4)
         ));
         component.setForeground(Color.BLACK);
         component.setFont(COMMS_FONT);
