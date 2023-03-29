@@ -97,14 +97,14 @@ public class MainView extends BaseView {
         this.addTextField(RECIPIENT_FIELD, false, 304, 246, 100, 22);
         this.addTextField(TOPIC_FIELD, false, 102, 278, 100, 22);
         this.addTextField(SUBJECT_FIELD, false, 304, 278, 100, 22);
-        this.addTextArea(CONTENTS_AREA, 102, 316, 302, 176);
+        this.addTextArea(CONTENTS_AREA, 1, 102, 316, 302, 176);
 
         this.addButton(CLEAR_CONTENTS_BUTTON, false, 102, 508, 100, 30);
         this.addButton(VIEW_SAVED_BUTTON, false, 219, 508, 100, 30);
         this.addButton(SEND_MESSAGE_BUTTON, false, 336, 508, 100, 30);
 
         // Activity panel elements defined
-        this.addTextArea(ACTIVITY_AREA, 462, 40, 496, 414);
+        this.addTextArea(ACTIVITY_AREA, 2, 462, 40, 496, 414);
         this.addLabel(new JLabel("Request"), true, 456, 470, 60, 22);
         this.addTextField(REQUEST_FIELD, false, 528, 470, 428, 22);
         this.addButton(CLEAR_REQUEST_BUTTON, false, 739, 508, 100, 30);
