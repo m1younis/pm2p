@@ -107,13 +107,20 @@ public abstract class BaseView extends JFrame {
         this.panel.add(component);
     }
 
-    protected void addTextArea(JTextArea component, int x, int y, int width, int height) {
+    protected void addTextArea(
+        JTextArea component,
+        int type,
+        int x,
+        int y,
+        int width,
+        int height) {
         component.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createEmptyBorder(),
             BorderFactory.createEmptyBorder(3, 4, 3, 4)
         ));
         component.setForeground(Color.BLACK);
-        component.setFont(COMMS_FONT);
+        // 1 => message contents text area, 2 => activity text area
+        component.setFont(type == 1 ? COMMS_FONT: new Font("Consolas", Font.PLAIN, 11));
         component.setEditable(false);            // Text areas will be disabled on app startup
 
         // Automatic scrolling configured
