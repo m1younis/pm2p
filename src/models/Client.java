@@ -18,10 +18,10 @@ public class Client extends Thread {
     private static final String PROTOCOL_ACK_MESSAGE =
         String.format("ACK? PM/%d ", MIN_PROTOCOL_VERSION);
     private static final String[] PROTOCOL_HELP_MESSAGE = {
-        "Supported requests",
-        "   HELP?\tDisplays this message",
-        "   TIME?\tReturns the current time (Unix Epoch) at the receiving peer",
-        "   QUIT!\tEnds the communication between two peers politely"
+        String.format("Requests supported in PM (v%d)", MIN_PROTOCOL_VERSION),
+        "  HELP?\tDisplays this message",
+        "  TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
+        "  QUIT!\tEnds the communication between two peers politely"
     };
 
     // Client's connection socket fields
