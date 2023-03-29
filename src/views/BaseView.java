@@ -198,11 +198,11 @@ public abstract class BaseView extends JFrame {
     }
 
     protected JPanel createPanel(int type, int x, int y, int width, int height) {
-        // 1 => connection panel, 2 => message panel, 3 => activity panel
         final JPanel component = new JPanel();
         component.setBounds(x, y, width, height);
         component.setBackground(BASE_COLOUR);
 
+        // 1 => connection panel, 2 => message panel, 3 => activity panel
         if (type == 1)
             component.setBorder(CONNECTION_BORDER);
         else if (type == 2)
