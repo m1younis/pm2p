@@ -135,7 +135,20 @@ public class MainView extends BaseView {
         JOptionPane.showInternalMessageDialog(this.panel, message);
     }
 
-    public void updateActivityArea(String message) {
-        ACTIVITY_AREA.append(message + "\n");
+    public void updateActivityArea(String text, boolean client) {
+        // The text to be displayed in the activity area is split by line to account for multi-line
+        // outputs and indicates whether it is on behalf of the client or connected peer(s)
+        final String[] meta = text.split("\n");
+        ACTIVITY_AREA.append(
+            String.format(
+                client ? "CLIENT: %s\n" : "  PEER: %s\n", meta[0]
+            )
+        );
+
+        final int lines = meta.length;
+        if (lines > 1) {
+            for (int i = 1; i < lines; i++)
+                ACTIVITY_AREA.append(String.format("      |%s\n", meta[i]));
+        }
     }
 }
