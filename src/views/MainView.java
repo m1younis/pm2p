@@ -2,6 +2,8 @@
 package views;
 
 import controllers.ClientController;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,7 +43,11 @@ public class MainView extends BaseView {
     private static final String IPv4_ADDRESS_REGEX =
         "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
                                     PORT_NUM_REGEX = "[0-9]{1,5}";
-    
+
+    // Activity text area datetime formatting defined
+    private static final SimpleDateFormat ACTIVITY_DATETIME_FORMAT =
+        new SimpleDateFormat("dd MMM yyyy, HH:mm:ss");
+
     public MainView() {
         super("pm2p", 1226, 586);
 
@@ -141,14 +147,16 @@ public class MainView extends BaseView {
         final String[] meta = text.split("\n");
         ACTIVITY_AREA.append(
             String.format(
-                client ? "CLIENT: %s\n" : "  PEER: %s\n", meta[0]
+                client ? "[%s] CLIENT: %s\n" : "[%s]   PEER: %s\n",
+                ACTIVITY_DATETIME_FORMAT.format(new Date()),
+                meta[0]
             )
         );
 
         final int lines = meta.length;
         if (lines > 1) {
             for (int i = 1; i < lines; i++)
-                ACTIVITY_AREA.append(String.format("      |%s\n", meta[i]));
+                ACTIVITY_AREA.append(String.format("\t\t\t      | %s\n", meta[i]));
         }
     }
 }
