@@ -41,20 +41,20 @@ public class MainView extends BaseView {
     private static final String IPv4_ADDRESS_REGEX =
         "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$",
                                     PORT_NUM_REGEX = "[0-9]{1,5}";
-
+    
     public MainView() {
-        super("pm2p", 986, 586);
+        super("pm2p", 1226, 586);
 
         new ClientController(this);      // Client handler startup
 
         // Connection panel elements defined
-        this.addLabel(new JLabel("Identifier"), true, 82, 66, 80, 22);
-        this.addLabel(new JLabel("IP Address"), true, 82, 94, 80, 22);
-        this.addLabel(new JLabel("Port"), true, 82, 122, 80, 22);
+        this.addLabel(new JLabel("Identifier"), true, 74, 66, 80, 22);
+        this.addLabel(new JLabel("IP Address"), true, 74, 94, 80, 22);
+        this.addLabel(new JLabel("Port"), true, 74, 122, 80, 22);
 
-        this.addTextField(IDENTIFIER_FIELD, true, 174, 66, 150, 22);
-        this.addTextField(IP_ADDRESS_FIELD, true, 174, 94, 150, 22);
-        this.addTextField(PORT_NUM_FIELD, true, 174, 122, 150, 22);
+        this.addTextField(IDENTIFIER_FIELD, true, 166, 66, 150, 22);
+        this.addTextField(IP_ADDRESS_FIELD, true, 166, 94, 150, 22);
+        this.addTextField(PORT_NUM_FIELD, true, 166, 122, 150, 22);
 
         this.addButton(CLEAR_INFO_BUTTON, true, 102, 164, 100, 30);
         this.addButton(CONNECT_BUTTON, true, 219, 164, 100, 30);
@@ -104,18 +104,18 @@ public class MainView extends BaseView {
         this.addButton(SEND_MESSAGE_BUTTON, false, 336, 508, 100, 30);
 
         // Activity panel elements defined
-        this.addTextArea(ACTIVITY_AREA, 2, 462, 40, 496, 414);
-        this.addLabel(new JLabel("Request"), true, 456, 470, 60, 22);
-        this.addTextField(REQUEST_FIELD, false, 528, 470, 428, 22);
-        this.addButton(CLEAR_REQUEST_BUTTON, false, 739, 508, 100, 30);
-        this.addButton(SEND_REQUEST_BUTTON, false, 856, 508, 100, 30);
+        this.addTextArea(ACTIVITY_AREA, 2, 460, 40, 742, 418);
+        this.addLabel(new JLabel("Request"), true, 504, 470, 65, 22);
+        this.addTextField(REQUEST_FIELD, false, 590, 470, 538, 22);
+        this.addButton(CLEAR_REQUEST_BUTTON, false, 983, 508, 100, 30);
+        this.addButton(SEND_REQUEST_BUTTON, false, 1100, 508, 100, 30);
 
         // Live datetime label initialised alongside the connection, message and activity panels
         // Calling `setVisible` displays the frame once the constructor is invoked
         this.handleDateTimeLabel(10, 6);
         this.panel.add(this.createPanel(1, 0, 32, 450, 150));
         this.panel.add(this.createPanel(2, 0, 210, 450, 316));
-        this.panel.add(this.createPanel(3, 450, 10, 520, 516));
+        this.panel.add(this.createPanel(3, 450, 10, 761, 516));
         this.setVisible(true);
     }
 
