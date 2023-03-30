@@ -50,7 +50,7 @@ public class Client extends Thread {
             String message = PROTOCOL_ACK_MESSAGE + this.socket.getLocalAddress();
             boolean acknowledged = false;
             writer.println(message);
-            this.ui.updateActivityArea(message);
+            this.ui.updateActivityArea(message, true);
 
             String request = reader.readLine();
             final String[] meta = request.split("\\s+");
@@ -61,7 +61,8 @@ public class Client extends Thread {
                     acknowledged = true;
                     message = String.format("%s (%s) joined", this.identifier, this.address);
                     writer.println(message);
-                    this.ui.updateActivityArea(String.join("\n", request, message));
+                    this.ui.updateActivityArea(request, false);
+                    this.ui.updateActivityArea(message, true);
                 }
             }
 
@@ -81,21 +82,22 @@ public class Client extends Thread {
 
                 if (response != null) {
                     writer.println(response);
-                    this.ui.updateActivityArea(String.join("\n", request, response));
+                    this.ui.updateActivityArea(request, false);
+                    this.ui.updateActivityArea(response, true);
                 } else
-                    this.ui.updateActivityArea(request);
+                    this.ui.updateActivityArea(request, false);
             }
 
             // Streams are closed promptly once communication ends or the protocol is broken due to
             // an invalid request
             if (this.identifier != null) {
                 if (acknowledged) {
-                    this.ui.updateActivityArea(request);
+                    this.ui.updateActivityArea(request, false);
                     message = String.format("%s (%s) was kicked", this.identifier, this.address);
                 } else
                     message = String.format("%s (%s) left", this.identifier, this.address);
                 writer.println(message);
-                this.ui.updateActivityArea(message);
+                this.ui.updateActivityArea(message, true);
             }
             reader.close();
             writer.close();
