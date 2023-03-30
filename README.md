@@ -13,7 +13,7 @@ Message bodies consist of four or more lines, which are interpreted as headers (
 until the contents are identified. The following are valid PM message headers:
 
 - `Message-uid: SHA-256 <hash>` – this is always the first header. `hash` is the unique SHA-256 sum
-corresponding to the remainding message headers and contents.
+corresponding to the remaining message headers and contents.
 
 - `Created: <time>` – the time (in Unix Epoch) at which the message object was created.
 
