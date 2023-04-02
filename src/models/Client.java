@@ -19,9 +19,9 @@ public class Client extends Thread {
         String.format("ACK? PM/%d ", MIN_PROTOCOL_VERSION);
     private static final String[] PROTOCOL_HELP_MESSAGE = {
         String.format("Requests supported in PM (v%d)", MIN_PROTOCOL_VERSION),
-        "   HELP?\tDisplays this message",
-        "   TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
-        "   QUIT!\tEnds the communication between two peers politely"
+        "HELP?\tDisplays this message",
+        "TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
+        "QUIT!\tEnds the communication between two peers politely"
     };
 
     // Client's connection socket fields
@@ -53,7 +53,7 @@ public class Client extends Thread {
             this.ui.updateActivityArea(message, true);
 
             String request = reader.readLine();
-            final String[] meta = request.split("\\s+");
+            String[] meta = request.split("\\s+");
             if (meta.length == 3 && request.startsWith("ACK? PM/")) {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
