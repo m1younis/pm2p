@@ -1,6 +1,7 @@
 
 package models;
 
+import controllers.MessageController;
 import views.MainView;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class Client extends Thread {
         String.format("Requests supported in PM (v%d)", MIN_PROTOCOL_VERSION),
         "HELP?\tDisplays this message",
         "TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
+        "LOAD? <hash>",
+        "\tRetrieves a stored messages object from the peer by its unique identifier",
+        "\t<hash> which is equivalent to the message body's SHA-256 sum",
         "QUIT!\tEnds the communication between two peers politely"
     };
 
@@ -77,7 +81,23 @@ public class Client extends Thread {
                     response = String.join("\n", PROTOCOL_HELP_MESSAGE);
                 else if (request.equals("TIME?"))
                     response = String.format("NOW %d", System.currentTimeMillis() / 1000);
-                else
+                else if (request.startsWith("LOAD?")) {
+                    meta = request.split("\\s+");
+                    if (meta.length == 2) {
+                        final Message target =
+                            MessageController.loadStoredMessages().getOrDefault(meta[1], null);
+                        if (target != null) {
+                            message = target.toString();
+                            response = String.join(
+                                "\n",
+                                "SUCCESS",
+                                message.substring(0, message.length() - 1)
+                            );
+                        } else
+                            response = "NOT FOUND";
+                    } else
+                        break;
+                } else
                     break;
 
                 if (response != null) {
