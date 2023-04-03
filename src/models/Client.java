@@ -73,10 +73,10 @@ public class Client extends Thread {
                 String response = null;
                 if (request.equals("QUIT!"))
                     acknowledged = false;
-                else if (request.equals("TIME?"))
-                    response = String.format("NOW %d", System.currentTimeMillis() / 1000);
                 else if (request.equals("HELP?"))
                     response = String.join("\n", PROTOCOL_HELP_MESSAGE);
+                else if (request.equals("TIME?"))
+                    response = String.format("NOW %d", System.currentTimeMillis() / 1000);
                 else
                     break;
 
