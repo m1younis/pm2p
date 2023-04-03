@@ -50,6 +50,11 @@ remaining request implementations are described as follows:
 - `TIME?` – returns the current time at the peer in Unix Epoch, with the response displayed as
 <code>NOW <em>time</em></code>.
 
+- `LOAD? <hash>` – retrieves a stored message object associated with the SHA-256 sum `hash`. Given
+  the message exists at the peer, the response is shown in the form
+  <code>SUCCESS <em>message</em></code>, where both parts are separated by a line. Otherwise,
+  `NOT FOUND` is returned.
+
 - `QUIT!` – (politely) ends the communication between two peers without giving a response.
 
 The `HELP?` request provides a summary of all supported requests in a similar fashion to the above.
