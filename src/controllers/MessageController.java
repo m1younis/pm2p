@@ -21,7 +21,7 @@ public class MessageController {
             // The `append` parameter is used to distinguish between writing to the local storage
             // file depending on whether it already exists
             final FileWriter writer = new FileWriter(MessageController.LOCAL_MESSAGES, append);
-            writer.write(message + "\n");
+            writer.write(String.format("%s\n", message));
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class MessageController {
             final Scanner in = new Scanner(new File(MessageController.LOCAL_MESSAGES));
             while (in.hasNextLine()) {
                 final String line = in.nextLine();
-                sb.append(line + "\n");
+                sb.append(String.format("%s\n", line));
                 // Since locally stored `Message` objects are separated by a blank line, the
                 // `StringBuilder` object used when parsing them must be reset before moving onto
                 // the next
