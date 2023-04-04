@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class representing a connected client thread and the PM protocol it communicates with.
@@ -39,6 +41,24 @@ public class Client extends Thread {
         this.socket = socket;
         this.address = socket.getRemoteSocketAddress().toString();
         this.ui = ui;
+    }
+
+    private String showRequestHandler(long since, String content) {
+        List<String> entries = new ArrayList<>();
+        MessageController.loadStoredMessages()
+            .values()
+            .forEach(message -> {
+                if (message.getCreated() >= since) {
+                    final String hash = message.getHash();
+                    if (content != null) {
+                        if (message.toString().contains(content))
+                            entries.add(hash);
+                    } else
+                        entries.add(hash);
+                }
+            });
+
+        return entries.isEmpty() ? "NONE" : String.format("ENTRIES %d", entries.size());
     }
 
     @Override
