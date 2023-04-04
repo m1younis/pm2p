@@ -57,20 +57,23 @@ public class Message {
         // A `StringBuilder` object is utilised here to position mandatory and optional message
         // headers accordingly
         final StringBuilder sb = new StringBuilder(
-            "Created: " + this.created + "\nFrom: " + this.sender + "\n"
+            String.format("Created: %s\nFrom: %s\n", this.created, this.sender)
         );
 
         // Optional headers are dealt with prior to the message contents, which are always required
         if (this.recipient != null)
-            sb.append("To: " + this.recipient + "\n");
+            sb.append(String.format("To: %s\n", this.recipient));
         if (this.topic != null)
-            sb.append("Topic: " + this.topic + "\n");
+            sb.append(String.format("Topic: %s\n", this.topic));
         if (this.subject != null)
-            sb.append("Subject: " + this.subject + "\n");
+            sb.append(String.format("Subject: %s\n", this.subject));
 
         sb.append(
-            "Contents: " + this.contents.length + "\n" +
-            String.join("\n", this.contents) + "\n"
+            String.join(
+                "\n",
+                String.format("Contents: %s", this.contents.length),
+                String.join("\n", this.contents)
+            )
         );
 
         return sb.toString();
