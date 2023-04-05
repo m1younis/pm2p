@@ -36,7 +36,7 @@ example message which follows the format outlined above.
 
 ## Requests & Responses
 
-Communication only occurs via interchanging defined requests once peers agree upon PM, which can be
+Communication only occurs via interchanging defined requests once peers agree upon PM. This can be
 achieved by sending the three-part protocol acknowledgement request below:
 
 ```
@@ -52,8 +52,14 @@ remaining request implementations are described as follows:
 
 - `LOAD? <hash>` – retrieves a stored message object associated with the SHA-256 sum `hash`. Given
   the message exists at the peer, the response is shown in the form
-  <code>SUCCESS <em>message</em></code>, where both parts are separated by a line. Otherwise,
+  <code>SUCCESS <em>message</em></code>, where both parts are divided by a new line. Otherwise,
   `NOT FOUND` is returned.
+
+- `SHOW? <since> <headers>` – lists the SHA-256 sums of messages created on or after `since`
+  (a Unix Epoch time in the past) that contain the contents specified by `headers` (0 or more)
+  which gives the number of following lines for the content to match. The response is a combination
+  of <code>ENTRIES <em>count</em></code> followed by the resulting hash values on separate lines.
+  `NONE` is returned if no messages meet the conditions set.
 
 - `QUIT!` – (politely) ends the communication between two peers without giving a response.
 
