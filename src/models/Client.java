@@ -14,7 +14,6 @@ import java.util.StringJoiner;
 
 /**
  * A class representing a connected client thread and the PM protocol it communicates with.
- * 
  */
 public class Client extends Thread {
     // PM communication protocol constants
@@ -26,7 +25,7 @@ public class Client extends Thread {
         "HELP?\tDisplays this message",
         "TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
         "LOAD? <hash>",
-        "\tRetrieves a stored messages object from the peer by its unique identifier",
+        "\tRetrieves a stored message object from the peer by its unique identifier",
         "\t`hash`, which is equivalent to the message body's SHA-256 sum",
         "SHOW? <since> <headers>",
         "\tLists the SHA-256 sum of all message objects created on or after `since`",
