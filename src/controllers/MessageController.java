@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * A class for handling operations on message objects.
@@ -83,18 +84,17 @@ public class MessageController {
         final Map<String, Message> messages = new LinkedHashMap<>();
 
         try {
-            final StringBuilder sb = new StringBuilder();
+            StringJoiner sj = new StringJoiner("\n");
             final Scanner in = new Scanner(new File(MessageController.LOCAL_MESSAGES));
             while (in.hasNextLine()) {
                 final String line = in.nextLine();
-                sb.append(String.format("%s\n", line));
-                // Since locally stored `Message` objects are separated by a blank line, the
-                // `StringBuilder` object used when parsing them must be reset before moving onto
-                // the next
+                sj.add(String.format("%s", line));
+                // Since locally stored `Message` objects are delimited by a blank line, the
+                // `StringJoiner` object used to parse them is reset when moving onto the next
                 if (line.isBlank()) {
-                    final Message message = MessageController.parseStoredMessage(sb.toString());
+                    final Message message = MessageController.parseStoredMessage(sj.toString());
                     messages.put(message.getHash(), message);
-                    sb.setLength(0);
+                    sj = new StringJoiner("\n");
                 }
             }
             in.close();
