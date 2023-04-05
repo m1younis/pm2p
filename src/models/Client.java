@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.regex.Pattern;
 
 /**
  * A class representing a connected client thread and the PM protocol it communicates with.
@@ -32,6 +33,10 @@ public class Client extends Thread {
         "\tand contain the contents specified by `headers`",
         "QUIT!\tEnds the communication between two peers politely"
     };
+
+    // Regex defined to detect `SHOW?` requests with a non-zero amount of headers
+    private static final String SHOW_REQUEST_HEADERS_REGEX =
+        "^SHOW\\?\\s(0|[1-9]\\d*)\\s[1-9]\\d*$";
 
     // Client's connection socket fields
     private Socket socket;
@@ -130,8 +135,17 @@ public class Client extends Thread {
                         if (since < System.currentTimeMillis() / 1000
                             && since >= 0
                             && contents >= 0) {
-                            response = (contents != 0) ?
-                                "IN PROGRESS..." : this.showRequestHandler(since, null);
+                            if (contents != 0) {
+                                this.ui.updateActivityArea(request, false);
+                                final StringJoiner sj = new StringJoiner("\n");
+                                for (int i = 0; i < contents; i++) {
+                                    final String line = reader.readLine();
+                                    sj.add(line);
+                                    this.ui.updateActivityArea(line, false);
+                                }
+                                response = this.showRequestHandler(since, sj.toString());
+                            } else
+                                response = this.showRequestHandler(since, null);
                         } else
                             break;
                     } else
@@ -141,7 +155,8 @@ public class Client extends Thread {
 
                 if (response != null) {
                     writer.println(response);
-                    this.ui.updateActivityArea(request, false);
+                    if (!Pattern.compile(SHOW_REQUEST_HEADERS_REGEX).matcher(request).matches())
+                        this.ui.updateActivityArea(request, false);
                     this.ui.updateActivityArea(response, true);
                 } else
                     this.ui.updateActivityArea(request, false);
