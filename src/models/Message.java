@@ -4,6 +4,7 @@ package models;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.StringJoiner;
 
 /**
  * A class representing the app's message objects.
@@ -54,29 +55,25 @@ public class Message {
     }
 
     private String build() {
-        // A `StringBuilder` object is utilised here to position mandatory and optional message
-        // headers accordingly
-        final StringBuilder sb = new StringBuilder(
-            String.format("Created: %s\nFrom: %s\n", this.created, this.sender)
-        );
+        // A `StringJoiner` object is utilised here to position mandatory and optional message
+        // headers accordingly, which is cleaner than its `StringBuilder` equivalent
+        final StringJoiner sj = new StringJoiner("\n")
+            .add(String.format("Created: %s", this.created))
+            .add(String.format("From: %s", this.sender));
 
         // Optional headers are dealt with prior to the message contents, which are always required
         if (this.recipient != null)
-            sb.append(String.format("To: %s\n", this.recipient));
+            sj.add(String.format("To: %s", this.recipient));
         if (this.topic != null)
-            sb.append(String.format("Topic: %s\n", this.topic));
+            sj.add(String.format("Topic: %s", this.topic));
         if (this.subject != null)
-            sb.append(String.format("Subject: %s\n", this.subject));
+            sj.add(String.format("Subject: %s", this.subject));
 
-        sb.append(
-            String.join(
-                "\n",
-                String.format("Contents: %s", this.contents.length),
-                String.join("\n", this.contents)
-            )
-        );
+        // Contents appended last
+        sj.add(String.format("Contents: %s", this.contents.length));
+        sj.add(String.join("\n", this.contents));
 
-        return sb.toString();
+        return sj.toString();
     }
 
     private String generateHash() {
@@ -126,6 +123,9 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message-uid: SHA-256 " + this.hash + "\n" + this.build();
+        return new StringJoiner("\n")
+            .add(String.format("Message-uid: SHA-256 %s", this.hash))
+            .add(this.build())
+            .toString();
     }
 }

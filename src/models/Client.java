@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * A class representing a connected client thread and the PM protocol it communicates with.
@@ -110,12 +111,10 @@ public class Client extends Thread {
                         final Message target =
                             MessageController.loadStoredMessages().getOrDefault(meta[1], null);
                         if (target != null) {
-                            message = target.toString();
-                            response = String.join(
-                                "\n",
-                                "SUCCESS",
-                                message.substring(0, message.length() - 1)
-                            );
+                            response = new StringJoiner("\n")
+                                .add("SUCCESS")
+                                .add(target.toString())
+                                .toString();
                         } else
                             response = "NOT FOUND";
                     } else
