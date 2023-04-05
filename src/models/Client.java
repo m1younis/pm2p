@@ -62,7 +62,10 @@ public class Client extends Thread {
                 }
             });
 
-        return entries.isEmpty() ? "NONE" : String.format("ENTRIES %d", entries.size());
+        return entries.isEmpty() ? "NONE" : new StringJoiner("\n")
+            .add(String.format("ENTRIES %d", entries.size()))
+            .add(String.join("\n", entries))
+            .toString();
     }
 
     @Override
