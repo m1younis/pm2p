@@ -27,6 +27,9 @@ public class Client extends Thread {
         "LOAD? <hash>",
         "\tRetrieves a stored messages object from the peer by its unique identifier",
         "\t<hash> which is equivalent to the message body's SHA-256 sum",
+        "SHOW? <since> <headers>",
+        "\tLists the SHA-256 sum of all message objects created on or after <since>",
+        "\tand contain the contents specified by <headers>",
         "QUIT!\tEnds the communication between two peers politely"
     };
 
@@ -115,6 +118,21 @@ public class Client extends Thread {
                             );
                         } else
                             response = "NOT FOUND";
+                    } else
+                        break;
+                } else if (request.startsWith("SHOW?")) {
+                    meta = request.split("\\s+");
+                    if (meta.length == 3) {
+                        final long since = Long.parseLong(meta[1]);
+                        final int contents = Integer.parseInt(meta[2]);
+                        // `since` => non-negative + non-future, `headers` => non-negative
+                        if (since < System.currentTimeMillis() / 1000
+                            && since >= 0
+                            && contents >= 0) {
+                            response = (contents != 0) ?
+                                "IN PROGRESS..." : this.showRequestHandler(since, null);
+                        } else
+                            break;
                     } else
                         break;
                 } else
