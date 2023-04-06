@@ -137,6 +137,8 @@ public class Client extends Thread {
                             && contents >= 0) {
                             if (contents != 0) {
                                 this.ui.updateActivityArea(request, false);
+                                // The number of lines in the content to search for in the message
+                                // <==> `contents` and is compiled by a `StringJoiner` object
                                 final StringJoiner sj = new StringJoiner("\n");
                                 for (int i = 0; i < contents; i++) {
                                     final String line = reader.readLine();
@@ -155,6 +157,8 @@ public class Client extends Thread {
 
                 if (response != null) {
                     writer.println(response);
+                    // All but non-zero header `SHOW?` requests are displayed in the activity log
+                    // since this is handled within the main loop
                     if (!Pattern.compile(SHOW_REQUEST_HEADERS_REGEX).matcher(request).matches())
                         this.ui.updateActivityArea(request, false);
                     this.ui.updateActivityArea(response, true);
