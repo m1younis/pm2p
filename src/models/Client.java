@@ -26,11 +26,11 @@ public class Client extends Thread {
         "HELP?\tDisplays this message",
         "TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
         "LOAD? <hash>",
-        "\tRetrieves a stored message object from the peer by its unique identifier",
-        "\t`hash`, which is equivalent to the message body's SHA-256 sum",
+        "  \tRetrieves a stored message object from the peer by its unique identifier",
+        "  \t`hash`, which is equivalent to the message body's SHA-256 sum",
         "SHOW? <since> <headers>",
-        "\tLists the SHA-256 sum of all message objects created on or after `since`",
-        "\tand contain the contents specified by `headers`",
+        "  \tLists the SHA-256 sum of all message objects created on or after `since`",
+        "  \tand contain the contents specified by `headers`",
         "QUIT!\tEnds the communication between two peers politely"
     };
 
