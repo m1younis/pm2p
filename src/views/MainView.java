@@ -147,7 +147,7 @@ public class MainView extends BaseView {
         final String[] meta = text.split("\n");
         ACTIVITY_AREA.append(
             String.format(
-                client ? "[%s] CLIENT: %s\n" : "[%s]   PEER: %s\n",
+                client ? "[%s]   ME: %s\n" : "[%s] PEER: %s\n",
                 ACTIVITY_DATETIME_FORMAT.format(new Date()),
                 meta[0]
             )
@@ -156,7 +156,7 @@ public class MainView extends BaseView {
         final int lines = meta.length;
         if (lines > 1) {
             for (int i = 1; i < lines; i++)
-                ACTIVITY_AREA.append(String.format("\t\t\t      | %s\n", meta[i]));
+                ACTIVITY_AREA.append(String.format("\t\t\t    | %s\n", meta[i]));
         }
     }
 }
