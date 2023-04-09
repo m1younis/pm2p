@@ -85,7 +85,7 @@ public class Client extends Thread {
             String message = PROTOCOL_ACK_MESSAGE + this.socket.getLocalAddress();
             boolean acknowledged = false;
             writer.println(message);
-            this.ui.updateActivityArea(message, true);
+            this.ui.updateActivityArea(message, null);
 
             String request = reader.readLine();
             String[] meta = request.split("\\s+");
@@ -96,8 +96,8 @@ public class Client extends Thread {
                     acknowledged = true;
                     message = String.format("%s (%s) joined", this.identifier, this.address);
                     writer.println(message);
-                    this.ui.updateActivityArea(request, false);
-                    this.ui.updateActivityArea(message, true);
+                    this.ui.updateActivityArea(request, this.identifier);
+                    this.ui.updateActivityArea(message, null);
                 }
             }
 
@@ -136,14 +136,14 @@ public class Client extends Thread {
                             && since >= 0
                             && contents >= 0) {
                             if (contents != 0) {
-                                this.ui.updateActivityArea(request, false);
+                                this.ui.updateActivityArea(request, this.identifier);
                                 // The number of lines in the content to search for in the message
                                 // <==> `contents` and is compiled by a `StringJoiner` object
                                 final StringJoiner sj = new StringJoiner("\n");
                                 for (int i = 0; i < contents; i++) {
                                     final String line = reader.readLine();
                                     sj.add(line);
-                                    this.ui.updateActivityArea(line, false);
+                                    this.ui.updateActivityArea(line, this.identifier);
                                 }
                                 response = this.showRequestHandler(since, sj.toString());
                             } else
@@ -160,22 +160,22 @@ public class Client extends Thread {
                     // All but non-zero header `SHOW?` requests are displayed in the activity log
                     // since this is handled within the main loop
                     if (!Pattern.compile(SHOW_REQUEST_HEADERS_REGEX).matcher(request).matches())
-                        this.ui.updateActivityArea(request, false);
-                    this.ui.updateActivityArea(response, true);
+                        this.ui.updateActivityArea(request, this.identifier);
+                    this.ui.updateActivityArea(response, null);
                 } else
-                    this.ui.updateActivityArea(request, false);
+                    this.ui.updateActivityArea(request, null);
             }
 
             // Streams are closed promptly once communication ends or the protocol is broken due to
             // an invalid request
             if (this.identifier != null) {
                 if (acknowledged) {
-                    this.ui.updateActivityArea(request, false);
+                    this.ui.updateActivityArea(request, this.identifier);
                     message = String.format("%s (%s) was kicked", this.identifier, this.address);
                 } else
                     message = String.format("%s (%s) left", this.identifier, this.address);
                 writer.println(message);
-                this.ui.updateActivityArea(message, true);
+                this.ui.updateActivityArea(message, null);
             }
             reader.close();
             writer.close();
