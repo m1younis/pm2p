@@ -52,6 +52,8 @@ public class Client extends Thread {
     }
 
     private String showRequestHandler(long since, String content) {
+        // A method dedicated to handling the `SHOW?` request - iterates over stored messages,
+        // recording their associated hash given the request's conditions for doing so are met
         List<String> entries = new ArrayList<>();
         MessageController.loadStoredMessages()
             .values()
@@ -158,7 +160,7 @@ public class Client extends Thread {
                 if (response != null) {
                     writer.println(response);
                     // All but non-zero header `SHOW?` requests are displayed in the activity log
-                    // since this is handled within the main loop
+                    // immediately since this is handled within the main loop
                     if (!Pattern.compile(SHOW_REQUEST_HEADERS_REGEX).matcher(request).matches())
                         this.ui.updateActivityArea(request, this.identifier);
                     this.ui.updateActivityArea(response, null);
