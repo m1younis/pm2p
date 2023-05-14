@@ -1,7 +1,9 @@
 
-import controllers.MessageController;
-import models.Message;
-import views.MainView;
+package dev.m1younis;
+
+import dev.m1younis.controller.MessageController;
+import dev.m1younis.model.Message;
+import dev.m1younis.view.MainView;
 import java.io.File;
 import java.io.IOException;
 

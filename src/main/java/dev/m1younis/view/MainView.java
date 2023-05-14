@@ -1,7 +1,7 @@
 
-package views;
+package dev.m1younis.view;
 
-import controllers.ClientController;
+import dev.m1younis.controller.ClientController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;

@@ -1,8 +1,8 @@
 
-package models;
+package dev.m1younis.model;
 
-import controllers.MessageController;
-import views.MainView;
+import dev.m1younis.controller.MessageController;
+import dev.m1younis.view.MainView;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

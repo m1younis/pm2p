@@ -1,7 +1,7 @@
 
-package controllers;
+package dev.m1younis.controller;
 
-import models.Message;
+import dev.m1younis.model.Message;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,14 +15,14 @@ import java.util.StringJoiner;
  * A class for handling operations on message objects.
  */
 public class MessageController {
-    public static final String LOCAL_MESSAGES = "messages.txt";
+    public static final String LOCAL_MESSAGES = "src/main/resources/messages.txt";
 
     public static void storeMessage(Message message, boolean append) {
         try {
             // The `append` parameter is used to distinguish between writing to the local storage
             // file depending on whether it already exists
             final FileWriter writer = new FileWriter(MessageController.LOCAL_MESSAGES, append);
-            writer.write(String.format("%s\n", message));
+            writer.write(String.format("%s\n\n", message));
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class MessageController {
             final Scanner in = new Scanner(new File(MessageController.LOCAL_MESSAGES));
             while (in.hasNextLine()) {
                 final String line = in.nextLine();
-                sj.add(String.format("%s", line));
+                sj.add(line);
                 // Since locally stored `Message` objects are delimited by a blank line, the
                 // `StringJoiner` object used to parse them is reset when moving onto the next
                 if (line.isBlank()) {

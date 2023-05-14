@@ -1,8 +1,8 @@
 
-package controllers;
+package dev.m1younis.controller;
 
-import models.Client;
-import views.MainView;
+import dev.m1younis.model.Client;
+import dev.m1younis.view.MainView;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

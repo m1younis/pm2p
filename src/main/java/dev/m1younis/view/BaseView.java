@@ -1,5 +1,5 @@
 
-package views;
+package dev.m1younis.view;
 
 import java.awt.Color;
 import java.awt.Font;

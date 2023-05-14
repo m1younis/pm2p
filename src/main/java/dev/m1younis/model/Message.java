@@ -1,5 +1,5 @@
 
-package models;
+package dev.m1younis.model;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
