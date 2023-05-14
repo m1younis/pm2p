@@ -82,8 +82,8 @@ public class Message {
             // (formed by invoking the `build` method) is hashed, converted to its hex equivalent
             // then stored within a `StringBuilder` object, resulting in the corresponding sum
             final StringBuilder sb = new StringBuilder();
-            final MessageDigest algo = MessageDigest.getInstance("SHA-256");
-            for (byte b : algo.digest(this.build().getBytes(StandardCharsets.UTF_8)))
+            final MessageDigest md = MessageDigest.getInstance("SHA-256");
+            for (byte b : md.digest(this.build().getBytes(StandardCharsets.UTF_8)))
                 sb.append(String.format("%02x", b));
 
             return sb.toString();
