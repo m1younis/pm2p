@@ -31,8 +31,8 @@ same format as `sender`.
 to determine how long the message contents are.
 
 Any unrecognised headers are ignored.
-[`messages.txt`](https://github.com/m1younis/pm2p/blob/master/messages.txt) contains the initial
-example message which follows the format outlined above.
+[`messages.txt`](https://github.com/m1younis/pm2p/blob/master/src/main/resources/messages.txt)
+contains the initial example message which follows the format outlined above.
 
 ## Requests & Responses
 
