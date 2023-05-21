@@ -143,6 +143,10 @@ public class MainView extends BaseView {
         JOptionPane.showInternalMessageDialog(this.panel, message);
     }
 
+    public ClientController getController() {
+        return this.controller;
+    }
+
     public void updateActivityArea(String text, String peer) {
         // The text to be displayed in the activity area is split by line to account for multi-line
         // outputs and indicates whether it is on behalf of the client or connected peer(s)
