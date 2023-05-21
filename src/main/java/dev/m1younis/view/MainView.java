@@ -145,18 +145,28 @@ public class MainView extends BaseView {
         // The text to be displayed in the activity area is split by line to account for multi-line
         // outputs and indicates whether it is on behalf of the client or connected peer(s)
         final String[] meta = text.split("\n");
-        ACTIVITY_AREA.append(
-            peer != null ? String.format(
-                "[%s] PEER: (%s) %s\n",
-                ACTIVITY_DATETIME_FORMAT.format(new Date()),
-                peer,
-                meta[0]
-            ) : String.format(
-                "[%s]   ME: %s\n",
-                ACTIVITY_DATETIME_FORMAT.format(new Date()),
-                meta[0]
-            )
-        );
+        if (peer != null) {
+            ACTIVITY_AREA.append(
+                text.contains("ACK?") ? String.format(
+                    "[%s] PEER: %s\n",
+                    ACTIVITY_DATETIME_FORMAT.format(new Date()),
+                    meta[0]
+                ) : String.format(
+                    "[%s] PEER: (%s) %s\n",
+                    ACTIVITY_DATETIME_FORMAT.format(new Date()),
+                    peer,
+                    meta[0]
+                )
+            );
+        } else {
+            ACTIVITY_AREA.append(
+                String.format(
+                    "[%s]   ME: %s\n",
+                    ACTIVITY_DATETIME_FORMAT.format(new Date()),
+                    meta[0]
+                )
+            );
+        }
 
         final int lines = meta.length;
         if (lines > 1) {
