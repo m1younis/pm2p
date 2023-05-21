@@ -48,10 +48,12 @@ public class MainView extends BaseView {
     private static final SimpleDateFormat ACTIVITY_DATETIME_FORMAT =
         new SimpleDateFormat("dd MMM yyyy, HH:mm:ss");
 
+    private ClientController controller;        // Client handler instance
+
     public MainView() {
         super("pm2p", 1226, 586);
 
-        new ClientController(this);      // Client handler startup
+        this.controller = new ClientController(this);      // Client handler startup
 
         // Connection panel elements defined
         this.addLabel(new JLabel("Identifier"), true, 74, 66, 80, 22);
