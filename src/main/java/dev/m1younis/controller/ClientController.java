@@ -34,6 +34,12 @@ public class ClientController extends Thread {
         }
     }
 
+    public void removeClient(Client thread) {
+        this.clients.remove(thread);
+        if (this.clients.isEmpty())      // Reactivates connection panel once all clients have left
+            this.ui.setConnectionPanelState(true);
+    }
+
     @Override
     public void run() {
         System.out.printf("Server started at %d...\n", DEFAULT_PORT);
