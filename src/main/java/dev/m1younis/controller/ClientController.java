@@ -6,6 +6,8 @@ import dev.m1younis.view.MainView;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class acting as the app's server handler for incoming client threads.
@@ -19,11 +21,14 @@ public class ClientController extends Thread {
 
     private MainView ui;               // Allows the handler and UI to interact
 
+    private List<Client> clients;                   // Tracks connected clients
+
     public ClientController(MainView ui) {
         this.ui = ui;
+        this.clients = new ArrayList<>();
         try {
             this.server = new ServerSocket(DEFAULT_PORT);
-            this.start();      // Invokes the `run` method's implementation
+            this.start();          // Invokes the `run` method's implementation
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,7 +42,12 @@ public class ClientController extends Thread {
                 // The `accept` method below listens for incoming clients on the server port
                 // specified above
                 this.socket = this.server.accept();
-                new Client(this.socket, this.ui).start();
+                // Prevents UI from establishing an outgoing connection given incoming connections
+                if (this.clients.isEmpty())
+                    this.ui.setConnectionPanelState(false);
+                final Client client = new Client(this.socket, this.ui);
+                this.clients.add(client);
+                client.start();
                 System.out.printf(
                     "Client connected from %s\n",
                     this.socket.getRemoteSocketAddress()
