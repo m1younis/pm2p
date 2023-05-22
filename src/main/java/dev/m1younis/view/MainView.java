@@ -180,4 +180,14 @@ public class MainView extends BaseView {
                 ACTIVITY_AREA.append(String.format("\t\t\t    | %s\n", meta[i]));
         }
     }
+
+    public void setConnectionPanelState(boolean enable) {
+        // Updates the state of connection panel elements depending on whether a peer is connecting
+        // or disconnecting
+        IDENTIFIER_FIELD.setEditable(enable);
+        IP_ADDRESS_FIELD.setEditable(enable);
+        PORT_NUM_FIELD.setEditable(enable);
+        CONNECT_BUTTON.setEnabled(enable);
+        CLEAR_INFO_BUTTON.setEnabled(enable);
+    }
 }
