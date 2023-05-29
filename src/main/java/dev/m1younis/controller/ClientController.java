@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class acting as the app's server handler for incoming client threads.
+ * A class acting as the app's server handler for incoming client threads (peers) and client
+ * controller for outgoing connections.
  */
 public class ClientController extends Thread {
     private static final int DEFAULT_PORT = 1123;        // Default server port
@@ -21,11 +22,11 @@ public class ClientController extends Thread {
 
     private MainView ui;               // Allows the handler and UI to interact
 
-    private List<Client> clients;                   // Tracks connected clients
+    private List<Client> peers;                       // Tracks connected peers
 
     public ClientController(MainView ui) {
         this.ui = ui;
-        this.clients = new ArrayList<>();
+        this.peers = new ArrayList<>();
         try {
             this.server = new ServerSocket(DEFAULT_PORT);
             this.start();          // Invokes the `run` method's implementation
@@ -34,9 +35,10 @@ public class ClientController extends Thread {
         }
     }
 
-    public void removeClient(Client thread) {
-        this.clients.remove(thread);
-        if (this.clients.isEmpty())      // Reactivates connection panel once all clients have left
+    public void removePeer(Client client) {
+        this.peers.remove(client);
+        // Reactivates connection panel once all peers have left
+        if (this.peers.isEmpty())
             this.ui.setConnectionPanelState(true);
     }
 
@@ -49,10 +51,10 @@ public class ClientController extends Thread {
                 // specified above
                 this.socket = this.server.accept();
                 // Prevents UI from establishing an outgoing connection given incoming connections
-                if (this.clients.isEmpty())
+                if (this.peers.isEmpty())
                     this.ui.setConnectionPanelState(false);
                 final Client client = new Client(this.socket, this.ui);
-                this.clients.add(client);
+                this.peers.add(client);
                 client.start();
                 System.out.printf(
                     "Client connected from %s\n",
