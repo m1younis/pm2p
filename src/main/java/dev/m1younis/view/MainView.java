@@ -68,7 +68,14 @@ public class MainView extends BaseView {
         this.addButton(CONNECT_BUTTON, true, 219, 164, 100, 30);
         this.addButton(DISCONNECT_BUTTON, false, 336, 164, 100, 30);
 
-        CONNECT_BUTTON.addActionListener(e -> {
+        CLEAR_INFO_BUTTON.addActionListener(l -> {
+            IDENTIFIER_FIELD.setText(null);
+            IP_ADDRESS_FIELD.setText(null);
+            PORT_NUM_FIELD.setText(null);
+            IDENTIFIER_FIELD.requestFocusInWindow();
+        });
+
+        CONNECT_BUTTON.addActionListener(l -> {
             // Connection details validated once the "Connect" button is submitted
             if (!this.connectionFieldsAreEmpty()) {
                 final String host = IP_ADDRESS_FIELD.getText(),
@@ -85,13 +92,6 @@ public class MainView extends BaseView {
                     this.displayMessage("Invalid IP address and/or port number submitted");
             } else
                 this.displayMessage("Please fill in all/missing connection information");
-        });
-
-        CLEAR_INFO_BUTTON.addActionListener(e -> {
-            IDENTIFIER_FIELD.setText(null);
-            IP_ADDRESS_FIELD.setText(null);
-            PORT_NUM_FIELD.setText(null);
-            IDENTIFIER_FIELD.requestFocusInWindow();
         });
 
         // Message panel elements defined
