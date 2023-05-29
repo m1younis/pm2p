@@ -187,7 +187,7 @@ public class Client extends Thread {
             // Client connection socket is closed last
             try {
                 this.socket.close();
-                this.ui.getController().removeClient(this);
+                this.ui.getController().removePeer(this);
                 System.out.printf("Client at %s disconnected\n", this.address);
             } catch (IOException e) {
                 e.printStackTrace();
