@@ -68,12 +68,7 @@ public class MainView extends BaseView {
         this.addButton(CONNECT_BUTTON, true, 219, 164, 100, 30);
         this.addButton(DISCONNECT_BUTTON, false, 336, 164, 100, 30);
 
-        CLEAR_INFO_BUTTON.addActionListener(l -> {
-            IDENTIFIER_FIELD.setText(null);
-            IP_ADDRESS_FIELD.setText(null);
-            PORT_NUM_FIELD.setText(null);
-            IDENTIFIER_FIELD.requestFocusInWindow();
-        });
+        CLEAR_INFO_BUTTON.addActionListener(l -> this.clearConnectionPanel());
 
         CONNECT_BUTTON.addActionListener(l -> {
             // Connection details validated once the "Connect" button is submitted
@@ -141,6 +136,13 @@ public class MainView extends BaseView {
 
     private void displayMessage(String message) {
         JOptionPane.showInternalMessageDialog(this.panel, message);
+    }
+
+    private void clearConnectionPanel() {
+        IDENTIFIER_FIELD.setText(null);
+        IP_ADDRESS_FIELD.setText(null);
+        PORT_NUM_FIELD.setText(null);
+        IDENTIFIER_FIELD.requestFocusInWindow();
     }
 
     public ClientController getController() {
