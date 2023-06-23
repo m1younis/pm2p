@@ -121,7 +121,7 @@ public abstract class BaseView extends JFrame {
         component.setForeground(Color.BLACK);
         // 1 => message contents text area, 2 => activity text area
         component.setFont(type == 1 ? COMMS_FONT: new Font("Consolas", Font.PLAIN, 11));
-        component.setEditable(false);            // Text areas will be disabled on app startup
+        component.setEditable(type == 1);            // Activity text area will always be disabled
 
         // Automatic scrolling configured
         final JScrollPane pane = new JScrollPane(component);
