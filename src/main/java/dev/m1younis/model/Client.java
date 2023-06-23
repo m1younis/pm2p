@@ -18,27 +18,27 @@ import java.util.regex.Pattern;
  */
 public class Client extends Thread {
     // PM communication protocol constants
-    private static final int MIN_PROTOCOL_VERSION = 1;
+    private static final int PROTOCOL_MIN_VERSION = 1;
     private static final String PROTOCOL_ACK_MESSAGE =
-        String.format("ACK? PM/%d ", MIN_PROTOCOL_VERSION);
-    private static final String[] PROTOCOL_HELP_MESSAGE = {
-        String.format("Requests supported in PM (v%d)", MIN_PROTOCOL_VERSION),
-        "HELP?\tDisplays this message",
-        "TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
-        "LOAD? <hash>",
+        String.format("ACK? PM/%d", PROTOCOL_MIN_VERSION);
+    private static final List<String> PROTOCOL_HELP_MESSAGE = List.of(
+        String.format("PoliteMessaging Protocol (v%d.0)", PROTOCOL_MIN_VERSION),
+        "> HELP?\tDisplays this message",
+        "> TIME?\tReturns the current time (in Unix Epoch) at the receiving peer",
+        "> LOAD? <hash>",
         "  \tRetrieves a stored message object from the peer by its unique identifier",
         "  \t`hash`, which is equivalent to the message body's SHA-256 sum",
-        "SHOW? <since> <headers>",
+        "> SHOW? <since> <headers>",
         "  \tLists the SHA-256 sum of all message objects created on or after `since`",
         "  \tand contain the contents specified by `headers`",
-        "QUIT!\tEnds the communication between two peers politely"
-    };
+        "> QUIT!\tEnds the communication between two peers politely"
+    );
 
     // Regex defined to detect `SHOW?` requests with a non-zero amount of headers
-    private static final String SHOW_REQUEST_HEADERS_REGEX =
+    private static final String SHOW_REQUEST_HEADER_REGEX =
         "^SHOW\\?\\s(0|[1-9]\\d*)\\s[1-9]\\d*$";
 
-    // Client's connection socket fields
+    // Client's connection-specific fields
     private Socket socket;
     private String address,
                 identifier;
@@ -47,7 +47,7 @@ public class Client extends Thread {
 
     public Client(Socket socket, MainView ui) {
         this.socket = socket;
-        this.address = socket.getRemoteSocketAddress().toString();
+        this.address = socket.getRemoteSocketAddress().toString().replace("localhost", "");
         this.ui = ui;
     }
 
@@ -84,7 +84,11 @@ public class Client extends Thread {
                 new PrintWriter(this.socket.getOutputStream(), true);
 
             // Protocol acknowledgement MUST occur prior to any communication
-            String message = PROTOCOL_ACK_MESSAGE + this.socket.getLocalAddress();
+            String message = String.format(
+                "%s %s",
+                PROTOCOL_ACK_MESSAGE,
+                this.socket.getLocalAddress()
+            );
             boolean acknowledged = false;
             writer.println(message);
             this.ui.updateActivityArea(message, null);
@@ -94,7 +98,7 @@ public class Client extends Thread {
             if (meta.length == 3 && request.startsWith("ACK? PM/")) {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
                 this.identifier = meta[2];
-                if (protocol >= MIN_PROTOCOL_VERSION) {
+                if (protocol >= PROTOCOL_MIN_VERSION) {
                     acknowledged = true;
                     message = String.format("%s (%s) joined", this.identifier, this.address);
                     writer.println(message);
@@ -161,7 +165,7 @@ public class Client extends Thread {
                     writer.println(response);
                     // All but non-zero header `SHOW?` requests are displayed in the activity log
                     // immediately since this is handled within the main loop
-                    if (!Pattern.compile(SHOW_REQUEST_HEADERS_REGEX).matcher(request).matches())
+                    if (!Pattern.compile(SHOW_REQUEST_HEADER_REGEX).matcher(request).matches())
                         this.ui.updateActivityArea(request, this.identifier);
                     this.ui.updateActivityArea(response, null);
                 } else
