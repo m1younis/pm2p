@@ -29,7 +29,7 @@ public class MessageController {
         }
     }
 
-    public static Message parseStoredMessage(String message) {
+    public static Message parseMessage(String message) {
         // Variables declared for each of the stored `Message` object's headers
         String hash = null,
              sender = null,
@@ -92,7 +92,7 @@ public class MessageController {
                 // Since locally stored `Message` objects are delimited by a blank line, the
                 // `StringJoiner` object used to parse them is reset when moving onto the next
                 if (line.isBlank()) {
-                    final Message message = MessageController.parseStoredMessage(sj.toString());
+                    final Message message = MessageController.parseMessage(sj.toString());
                     messages.put(message.getHash(), message);
                     sj = new StringJoiner("\n");
                 }
