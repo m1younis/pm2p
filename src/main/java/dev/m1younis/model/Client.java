@@ -43,7 +43,7 @@ public class Client extends Thread {
     private String address,
                 identifier;
 
-    private MainView ui;        // Allows the client thread and UI to interact
+    private MainView ui;           // Allows the client thread and UI to interact
 
     public Client(Socket socket, MainView ui) {
         this.socket = socket;
@@ -51,7 +51,7 @@ public class Client extends Thread {
         this.ui = ui;
     }
 
-    private String showRequestHandler(long since, String content) {
+    private String filterStoredMessages(long since, String content) {
         // A method dedicated to handling the `SHOW?` request - iterates over stored messages,
         // recording their associated hash given the request's conditions for doing so are met
         List<String> entries = new ArrayList<>();
@@ -151,9 +151,9 @@ public class Client extends Thread {
                                     sj.add(line);
                                     this.ui.updateActivityArea(line, this.identifier);
                                 }
-                                response = this.showRequestHandler(since, sj.toString());
+                                response = this.filterStoredMessages(since, sj.toString());
                             } else
-                                response = this.showRequestHandler(since, null);
+                                response = this.filterStoredMessages(since, null);
                         } else
                             break;
                     } else
