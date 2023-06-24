@@ -53,7 +53,7 @@ public class ClientController extends Thread {
                 // Prevents UI from establishing an outgoing connection given incoming connections
                 if (this.peers.isEmpty())
                     this.ui.setConnectionPanelState(false, false);
-                final Client client = new Client(this.socket, this.ui);
+                final Client client = new Client(this.socket, this.ui, null, true);
                 this.peers.add(client);
                 client.start();
                 System.out.printf(
