@@ -39,7 +39,7 @@ public class ClientController extends Thread {
         this.peers.remove(client);
         // Reactivates connection panel once all peers have left
         if (this.peers.isEmpty())
-            this.ui.setConnectionPanelState(true);
+            this.ui.setConnectionPanelState(true, false);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ClientController extends Thread {
                 this.socket = this.server.accept();
                 // Prevents UI from establishing an outgoing connection given incoming connections
                 if (this.peers.isEmpty())
-                    this.ui.setConnectionPanelState(false);
+                    this.ui.setConnectionPanelState(false, false);
                 final Client client = new Client(this.socket, this.ui);
                 this.peers.add(client);
                 client.start();
