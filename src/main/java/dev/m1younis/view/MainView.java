@@ -34,8 +34,8 @@ public class MainView extends BaseView {
                                     CONNECT_BUTTON = new JButton("Connect"),
                                  DISCONNECT_BUTTON = new JButton("Disconnect"),
                              CLEAR_CONTENTS_BUTTON = new JButton("Clear"),
-                                 VIEW_SAVED_BUTTON = new JButton("View Saved"),
-                               SEND_MESSAGE_BUTTON = new JButton("Send"),
+                            STORED_MESSAGES_BUTTON = new JButton("View All"),
+                             CREATE_MESSAGE_BUTTON = new JButton("Create"),
                               CLEAR_REQUEST_BUTTON = new JButton("Clear"),
                                SEND_REQUEST_BUTTON = new JButton("Send");
 
@@ -103,8 +103,8 @@ public class MainView extends BaseView {
         this.addTextArea(CONTENTS_AREA, 1, 102, 316, 302, 176);
 
         this.addButton(CLEAR_CONTENTS_BUTTON, false, 102, 508, 100, 30);
-        this.addButton(VIEW_SAVED_BUTTON, false, 219, 508, 100, 30);
-        this.addButton(SEND_MESSAGE_BUTTON, false, 336, 508, 100, 30);
+        this.addButton(STORED_MESSAGES_BUTTON, false, 219, 508, 100, 30);
+        this.addButton(CREATE_MESSAGE_BUTTON, false, 336, 508, 100, 30);
 
         // Activity panel elements defined
         this.addTextArea(ACTIVITY_AREA, 2, 460, 40, 742, 418);
@@ -155,7 +155,7 @@ public class MainView extends BaseView {
         final String[] meta = text.split("\n");
         if (peer != null) {
             ACTIVITY_AREA.append(
-                text.contains("ACK?") ? String.format(
+                text.startsWith("ACK? PM/") ? String.format(
                     "[%s] PEER: %s\n",
                     ACTIVITY_DATETIME_FORMAT.format(new Date()),
                     meta[0]
