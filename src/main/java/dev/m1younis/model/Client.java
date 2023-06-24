@@ -45,10 +45,14 @@ public class Client extends Thread {
 
     private MainView ui;           // Allows the client thread and UI to interact
 
-    public Client(Socket socket, MainView ui) {
+    private boolean peer;          // Indicates whether thread is a (connecting) peer
+
+    public Client(Socket socket, MainView ui, String identifier, boolean peer) {
         this.socket = socket;
         this.address = socket.getRemoteSocketAddress().toString().replace("localhost", "");
         this.ui = ui;
+        this.identifier = identifier;
+        this.peer = peer;
     }
 
     private String filterStoredMessages(long since, String content) {
@@ -97,7 +101,8 @@ public class Client extends Thread {
             String[] meta = request.split("\\s+");
             if (meta.length == 3 && request.startsWith("ACK? PM/")) {
                 final int protocol = Integer.parseInt(meta[1].split("/")[1]);
-                this.identifier = meta[2];
+                if (this.peer)          // Overwrites client identifier given the thread is a peer
+                    this.identifier = meta[2];
                 if (protocol >= PROTOCOL_MIN_VERSION) {
                     acknowledged = true;
                     message = String.format("%s (%s) joined", this.identifier, this.address);
@@ -191,7 +196,8 @@ public class Client extends Thread {
             // Client connection socket is closed last
             try {
                 this.socket.close();
-                this.ui.getController().removePeer(this);
+                if (this.peer)
+                    this.ui.getController().removePeer(this);
                 System.out.printf("Client at %s disconnected\n", this.address);
             } catch (IOException e) {
                 e.printStackTrace();
