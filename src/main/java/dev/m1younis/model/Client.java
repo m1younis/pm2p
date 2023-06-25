@@ -91,7 +91,7 @@ public class Client extends Thread {
             String message = String.format(
                 "%s %s",
                 PROTOCOL_ACK_MESSAGE,
-                this.socket.getLocalAddress()
+                this.peer ? this.socket.getLocalAddress() : this.identifier
             );
             boolean acknowledged = false;
             writer.println(message);
