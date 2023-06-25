@@ -198,6 +198,8 @@ public class Client extends Thread {
                 this.socket.close();
                 if (this.peer)
                     this.ui.getController().removePeer(this);
+                else
+                    this.ui.getController().disconnect();
                 System.out.printf("Client at %s disconnected\n", this.address);
             } catch (IOException e) {
                 e.printStackTrace();
