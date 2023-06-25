@@ -4,6 +4,7 @@ package dev.m1younis.controller;
 import dev.m1younis.model.Client;
 import dev.m1younis.view.MainView;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ public class ClientController extends Thread {
 
     private List<Client> peers;                       // Tracks connected peers
 
+    private Client self = null;            // Instance for outgoing connections
+
     public ClientController(MainView ui) {
         this.ui = ui;
         this.peers = new ArrayList<>();
@@ -35,11 +38,47 @@ public class ClientController extends Thread {
         }
     }
 
+    public void connect(String identifier, String host, int port) throws Exception {
+        if (this.self == null) {
+            this.socket = new Socket(host, port);
+            this.self = new Client(this.socket, this.ui, identifier, false);
+            this.self.start();
+            this.ui.setConnectionPanelState(false, false);
+            this.ui.setActivityPanelState(true);
+        }
+    }
+
+    public void disconnect() {
+        try {
+            if (this.self != null) {
+                this.socket.close();
+                this.self = null;
+                this.ui.setConnectionPanelState(true, false);
+                this.ui.setActivityPanelState(false);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleRequest(String input) {
+        if (this.socket != null) {
+            try {
+                new PrintWriter(this.socket.getOutputStream(), true).println(input);
+                this.ui.updateActivityArea(input, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void removePeer(Client client) {
         this.peers.remove(client);
-        // Reactivates connection panel once all peers have left
-        if (this.peers.isEmpty())
+        // Reactivates connection panel and disables UI request handling once all peers have left
+        if (this.peers.isEmpty()) {
             this.ui.setConnectionPanelState(true, true);
+            this.ui.setActivityPanelState(false);
+        }
     }
 
     @Override
@@ -48,18 +87,23 @@ public class ClientController extends Thread {
         try {
             while (true) {
                 // The `accept` method below listens for incoming clients on the server port
-                // specified above
+                // specified above - peers can only connect if the client instance is empty
                 this.socket = this.server.accept();
-                // Prevents UI from establishing an outgoing connection given incoming connections
-                if (this.peers.isEmpty())
-                    this.ui.setConnectionPanelState(false, true);
-                final Client client = new Client(this.socket, this.ui, null, true);
-                this.peers.add(client);
-                client.start();
-                System.out.printf(
-                    "Client connected from %s\n",
-                    this.socket.getRemoteSocketAddress()
-                );
+                if (this.self == null) {
+                    // Prevents UI from establishing an outgoing connection given incoming
+                    // connections
+                    if (this.peers.isEmpty()) {
+                        this.ui.setConnectionPanelState(false, true);
+                        this.ui.setActivityPanelState(true);
+                    }
+                    final Client client = new Client(this.socket, this.ui, null, true);
+                    this.peers.add(client);
+                    client.start();
+                    System.out.printf(
+                        "Client connected from %s\n",
+                        this.socket.getRemoteSocketAddress()
+                    );
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
