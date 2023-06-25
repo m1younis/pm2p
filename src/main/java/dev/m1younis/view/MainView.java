@@ -184,14 +184,13 @@ public class MainView extends BaseView {
     }
 
     public void setConnectionPanelState(boolean enable, boolean peer) {
-        // Updates the state of connection panel elements depending on whether a peer is connecting
-        // or disconnecting
+        // Updates the state of connection panel elements once a peer connects or disconnects
         IDENTIFIER_FIELD.setEditable(enable);
         IP_ADDRESS_FIELD.setEditable(enable);
         PORT_NUM_FIELD.setEditable(enable);
         CONNECT_BUTTON.setEnabled(enable);
         CLEAR_INFO_BUTTON.setEnabled(enable);
-        if (peer)
+        if (!peer)
             DISCONNECT_BUTTON.setEnabled(!enable);
     }
 }
