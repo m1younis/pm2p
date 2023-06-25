@@ -92,7 +92,7 @@ public class MainView extends BaseView {
                 } else
                     this.displayMessage("Invalid IP address and/or port number submitted");
             } else
-                this.displayMessage("Please fill in all/missing connection information");
+                this.displayMessage("Please fill in all the connection fields");
         });
 
         DISCONNECT_BUTTON.addActionListener(l -> {
@@ -107,15 +107,33 @@ public class MainView extends BaseView {
         this.addLabel(new JLabel("Subject"), true, 232, 278, 60, 22);
         this.addLabel(new JLabel("Contents"), true, 30, 316, 60, 22);
 
-        this.addTextField(SENDER_FIELD, false, 102, 246, 100, 22);
-        this.addTextField(RECIPIENT_FIELD, false, 304, 246, 100, 22);
-        this.addTextField(TOPIC_FIELD, false, 102, 278, 100, 22);
-        this.addTextField(SUBJECT_FIELD, false, 304, 278, 100, 22);
+        this.addTextField(SENDER_FIELD, true, 102, 246, 100, 22);
+        this.addTextField(RECIPIENT_FIELD, true, 304, 246, 100, 22);
+        this.addTextField(TOPIC_FIELD, true, 102, 278, 100, 22);
+        this.addTextField(SUBJECT_FIELD, true, 304, 278, 100, 22);
         this.addTextArea(CONTENTS_AREA, 1, 102, 316, 302, 176);
 
-        this.addButton(CLEAR_CONTENTS_BUTTON, false, 102, 508, 100, 30);
-        this.addButton(STORED_MESSAGES_BUTTON, false, 219, 508, 100, 30);
-        this.addButton(CREATE_MESSAGE_BUTTON, false, 336, 508, 100, 30);
+        this.addButton(CLEAR_CONTENTS_BUTTON, true, 102, 508, 100, 30);
+        this.addButton(STORED_MESSAGES_BUTTON, true, 219, 508, 100, 30);
+        this.addButton(CREATE_MESSAGE_BUTTON, true, 336, 508, 100, 30);
+
+        CLEAR_CONTENTS_BUTTON.addActionListener(l -> {
+            SENDER_FIELD.setText(null);
+            RECIPIENT_FIELD.setText(null);
+            TOPIC_FIELD.setText(null);
+            SUBJECT_FIELD.setText(null);
+            CONTENTS_AREA.setText(null);
+            SENDER_FIELD.requestFocusInWindow();
+        });
+
+        STORED_MESSAGES_BUTTON.addActionListener(l -> {
+            this.displayMessage("TODO: stored messages");
+        });
+
+        CREATE_MESSAGE_BUTTON.addActionListener(l -> {
+            this.displayMessage("TODO: message creation");
+            SENDER_FIELD.requestFocusInWindow();
+        });
 
         // Activity panel elements defined
         this.addTextArea(ACTIVITY_AREA, 2, 460, 40, 742, 418);
