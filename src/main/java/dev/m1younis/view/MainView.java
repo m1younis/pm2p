@@ -74,19 +74,30 @@ public class MainView extends BaseView {
             // Connection details validated once the "Connect" button is submitted
             if (!this.connectionFieldsAreEmpty()) {
                 final String host = IP_ADDRESS_FIELD.getText(),
-                            iport = PORT_NUM_FIELD.getText();
+                    iport = PORT_NUM_FIELD.getText();
                 if (this.connectionInfoIsValid(host, iport)) {
                     // Supplied info is recorded after validation and used in establishing the
                     // connection to a peer
+                    final String identifier = IDENTIFIER_FIELD.getText().strip();
                     final int port = Integer.parseInt(iport);
-                    this.displayMessage(
-                        port >= 1 && port <= 65535 ? "Still a bunch to do!" :
-                        "Port number must be between 1 and 65535 inclusive"
-                    );
+                    if (port >= 1 && port <= 65535) {
+                        try {
+                            this.controller.connect(identifier, host, port);
+                        } catch (Exception e) {
+                            this.displayMessage("Error occurred trying to establish a connection");
+                            e.printStackTrace();
+                        }
+                    } else
+                        this.displayMessage("Port number must be between 1 and 65535 inclusive");
                 } else
                     this.displayMessage("Invalid IP address and/or port number submitted");
             } else
                 this.displayMessage("Please fill in all/missing connection information");
+        });
+
+        DISCONNECT_BUTTON.addActionListener(l -> {
+            this.controller.disconnect();
+            this.clearConnectionPanel();
         });
 
         // Message panel elements defined
@@ -112,6 +123,21 @@ public class MainView extends BaseView {
         this.addTextField(REQUEST_FIELD, false, 590, 470, 538, 22);
         this.addButton(CLEAR_REQUEST_BUTTON, false, 983, 508, 100, 30);
         this.addButton(SEND_REQUEST_BUTTON, false, 1100, 508, 100, 30);
+
+        CLEAR_REQUEST_BUTTON.addActionListener(l -> {
+            REQUEST_FIELD.setText(null);
+            REQUEST_FIELD.requestFocusInWindow();
+        });
+
+        SEND_REQUEST_BUTTON.addActionListener(l -> {
+            final String input = REQUEST_FIELD.getText().strip();
+            if (!input.isEmpty()) {
+                this.controller.handleRequest(input);
+                REQUEST_FIELD.setText(null);
+            } else
+                this.displayMessage("Please supply a valid request");
+            REQUEST_FIELD.requestFocusInWindow();
+        });
 
         // Live datetime label initialised alongside the connection, message and activity panels
         // Calling `setVisible` displays the frame once the constructor is invoked
