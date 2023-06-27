@@ -72,7 +72,7 @@ public class MainView extends BaseView {
 
         CONNECT_BUTTON.addActionListener(l -> {
             // Connection details validated once the "Connect" button is submitted
-            if (!this.connectionFieldsAreEmpty()) {
+            if (this.connectionInfoSupplied()) {
                 final String host = IP_ADDRESS_FIELD.getText(),
                     iport = PORT_NUM_FIELD.getText();
                 if (this.connectionInfoIsValid(host, iport)) {
@@ -166,10 +166,10 @@ public class MainView extends BaseView {
         this.setVisible(true);
     }
 
-    private boolean connectionFieldsAreEmpty() {
-        return IDENTIFIER_FIELD.getText().isEmpty()
-            && IP_ADDRESS_FIELD.getText().isEmpty()
-            && PORT_NUM_FIELD.getText().isEmpty();
+    private boolean connectionInfoSupplied() {
+        return !IDENTIFIER_FIELD.getText().isBlank()
+            && !IP_ADDRESS_FIELD.getText().isBlank()
+            && !PORT_NUM_FIELD.getText().isBlank();
     }
 
     private boolean connectionInfoIsValid(String host, String port) {
