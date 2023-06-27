@@ -117,22 +117,15 @@ public class MainView extends BaseView {
         this.addButton(STORED_MESSAGES_BUTTON, true, 219, 508, 100, 30);
         this.addButton(CREATE_MESSAGE_BUTTON, true, 336, 508, 100, 30);
 
-        CLEAR_CONTENTS_BUTTON.addActionListener(l -> {
-            SENDER_FIELD.setText(null);
-            RECIPIENT_FIELD.setText(null);
-            TOPIC_FIELD.setText(null);
-            SUBJECT_FIELD.setText(null);
-            CONTENTS_AREA.setText(null);
-            SENDER_FIELD.requestFocusInWindow();
-        });
+        CLEAR_CONTENTS_BUTTON.addActionListener(l -> this.clearMessagePanel());
 
-        STORED_MESSAGES_BUTTON.addActionListener(l -> {
-            this.displayMessage("TODO: stored messages");
-        });
+        STORED_MESSAGES_BUTTON.addActionListener(l ->
+            this.displayMessage("TODO: stored messages")
+        );
 
         CREATE_MESSAGE_BUTTON.addActionListener(l -> {
             this.displayMessage("TODO: message creation");
-            SENDER_FIELD.requestFocusInWindow();
+            this.clearMessagePanel();
         });
 
         // Activity panel elements defined
@@ -187,6 +180,15 @@ public class MainView extends BaseView {
         IP_ADDRESS_FIELD.setText(null);
         PORT_NUM_FIELD.setText(null);
         IDENTIFIER_FIELD.requestFocusInWindow();
+    }
+
+    private void clearMessagePanel() {
+        SENDER_FIELD.setText(null);
+        RECIPIENT_FIELD.setText(null);
+        TOPIC_FIELD.setText(null);
+        SUBJECT_FIELD.setText(null);
+        CONTENTS_AREA.setText(null);
+        SENDER_FIELD.requestFocusInWindow();
     }
 
     public ClientController getController() {
