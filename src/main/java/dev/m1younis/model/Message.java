@@ -54,26 +54,26 @@ public class Message {
         this.contents = contents;
     }
 
-    private String build() {
-        // A `StringJoiner` object is utilised here to position mandatory and optional message
-        // headers accordingly, which is cleaner than its `StringBuilder` equivalent
-        final StringJoiner sj = new StringJoiner("\n")
-            .add(String.format("Created: %s", this.created))
-            .add(String.format("From: %s", this.sender));
+    private String build(boolean append) {
+        // A `StringBuilder` object is utilised here to position mandatory and optional message
+        // headers accordingly
+        final StringBuilder sb = new StringBuilder(String.format("Created: %d\n", this.created))
+            .append(String.format("From: %s\n", this.sender));
 
-        // Optional headers are dealt with prior to the message contents, which are always required
+        // Optional headers are dealt with prior to the message contents
         if (this.recipient != null)
-            sj.add(String.format("To: %s", this.recipient));
+            sb.append(String.format("To: %s\n", this.recipient));
         if (this.topic != null)
-            sj.add(String.format("Topic: %s", this.topic));
+            sb.append(String.format("Topic: %s\n", this.topic));
         if (this.subject != null)
-            sj.add(String.format("Subject: %s", this.subject));
+            sb.append(String.format("Subject: %s\n", this.subject));
 
         // Contents appended last
-        sj.add(String.format("Contents: %s", this.contents.length));
-        sj.add(String.join("\n", this.contents));
+        sb.append(String.format("Contents: %d\n", this.contents.length))
+            .append(String.join("\n", this.contents));
 
-        return sj.toString();
+        // `append` determines whether a trailing line is added
+        return append ? sb.append("\n").toString() : sb.toString();
     }
 
     private String generateHash() {
@@ -83,7 +83,7 @@ public class Message {
             // then stored within a `StringBuilder` object, resulting in the corresponding sum
             final StringBuilder sb = new StringBuilder();
             final MessageDigest md = MessageDigest.getInstance("SHA-256");
-            for (byte b : md.digest(this.build().getBytes(StandardCharsets.UTF_8)))
+            for (byte b : md.digest(this.build(true).getBytes(StandardCharsets.UTF_8))) 
                 sb.append(String.format("%02x", b));
 
             return sb.toString();
@@ -125,7 +125,7 @@ public class Message {
     public String toString() {
         return new StringJoiner("\n")
             .add(String.format("Message-uid: SHA-256 %s", this.hash))
-            .add(this.build())
+            .add(this.build(false))
             .toString();
     }
 }
