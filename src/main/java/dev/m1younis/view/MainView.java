@@ -124,8 +124,11 @@ public class MainView extends BaseView {
         );
 
         CREATE_MESSAGE_BUTTON.addActionListener(l -> {
-            this.displayMessage("TODO: message creation");
-            this.clearMessagePanel();
+            if (this.requiredMessageInfoSupplied()) {
+                this.displayMessage("TODO: message creation");
+                this.clearMessagePanel();
+            } else
+                this.displayMessage("Please specify the message sender and/or contents");
         });
 
         // Activity panel elements defined
@@ -189,6 +192,11 @@ public class MainView extends BaseView {
         SUBJECT_FIELD.setText(null);
         CONTENTS_AREA.setText(null);
         SENDER_FIELD.requestFocusInWindow();
+    }
+    
+    private boolean requiredMessageInfoSupplied() {
+        return !SENDER_FIELD.getText().isBlank()
+            && !CONTENTS_AREA.getText().isBlank();
     }
 
     public ClientController getController() {
