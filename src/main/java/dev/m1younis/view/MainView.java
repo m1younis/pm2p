@@ -2,6 +2,8 @@
 package dev.m1younis.view;
 
 import dev.m1younis.controller.ClientController;
+import dev.m1younis.controller.MessageController;
+import dev.m1younis.model.Message;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -124,8 +126,22 @@ public class MainView extends BaseView {
         );
 
         CREATE_MESSAGE_BUTTON.addActionListener(l -> {
+            // Required message fields validated before creation
             if (this.requiredMessageInfoSupplied()) {
-                this.displayMessage("TODO: message creation");
+                // Optional info collection
+                final String recipient = RECIPIENT_FIELD.getText().strip(),
+                                 topic = TOPIC_FIELD.getText().strip(),
+                               subject = SUBJECT_FIELD.getText().strip();
+                // Message object created and stored locally
+                final Message created = new Message(
+                    SENDER_FIELD.getText().strip(),
+                    recipient.isEmpty() ? null : recipient,
+                    topic.isEmpty() ? null : topic,
+                    subject.isEmpty() ? null : subject,
+                    CONTENTS_AREA.getText().split("\\r?\\n")
+                );
+                MessageController.storeMessage(created, true);
+                this.displayMessage("Message created and stored successfully");
                 this.clearMessagePanel();
             } else
                 this.displayMessage("Please specify the message sender and/or contents");
