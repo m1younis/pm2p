@@ -50,12 +50,11 @@ public class ClientController extends Thread {
 
     public void disconnect() {
         try {
-            if (this.self != null) {
-                this.socket.close();
+            this.socket.close();
+            this.ui.setConnectionPanelState(true, false);
+            this.ui.setActivityPanelState(false);
+            if (this.self != null)
                 this.self = null;
-                this.ui.setConnectionPanelState(true, false);
-                this.ui.setActivityPanelState(false);
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
