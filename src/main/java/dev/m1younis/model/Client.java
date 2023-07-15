@@ -140,27 +140,32 @@ public class Client extends Thread {
                 } else if (request.startsWith("SHOW?")) {
                     meta = request.split("\\s+");
                     if (meta.length == 3) {
-                        final long since = Long.parseLong(meta[1]);
-                        final int contents = Integer.parseInt(meta[2]);
-                        // `since` => non-negative + non-future, `headers` => non-negative
-                        if (since < System.currentTimeMillis() / 1000
-                            && since >= 0
-                            && contents >= 0) {
-                            if (contents != 0) {
-                                this.ui.updateActivityArea(request, this.identifier);
-                                // The number of lines in the content to search for in the message
-                                // <==> `contents` and is compiled by a `StringJoiner` object
-                                final StringJoiner sj = new StringJoiner("\n");
-                                for (int i = 0; i < contents; i++) {
-                                    final String line = reader.readLine();
-                                    sj.add(line);
-                                    this.ui.updateActivityArea(line, this.identifier);
-                                }
-                                response = this.filterStoredMessages(since, sj.toString());
+                        try {
+                            final long since = Long.parseLong(meta[1]);
+                            final int contents = Integer.parseInt(meta[2]);
+                            // `since` => non-negative + non-future, `headers` => non-negative
+                            if (since < System.currentTimeMillis() / 1000
+                                && since >= 0
+                                && contents >= 0) {
+                                if (contents != 0) {
+                                    this.ui.updateActivityArea(request, this.identifier);
+                                    // The number of lines in the content to search for in the
+                                    // message <==> `contents` and is compiled by a `StringJoiner`
+                                    // object
+                                    final StringJoiner sj = new StringJoiner("\n");
+                                    for (int i = 0; i < contents; i++) {
+                                        final String line = reader.readLine();
+                                        sj.add(line);
+                                        this.ui.updateActivityArea(line, this.identifier);
+                                    }
+                                    response = this.filterStoredMessages(since, sj.toString());
+                                } else
+                                    response = this.filterStoredMessages(since, null);
                             } else
-                                response = this.filterStoredMessages(since, null);
-                        } else
+                                break;
+                        } catch (Exception e) {
                             break;
+                        }
                     } else
                         break;
                 } else
