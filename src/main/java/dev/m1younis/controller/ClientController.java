@@ -38,6 +38,18 @@ public class ClientController extends Thread {
         }
     }
 
+    private boolean isValidRequest(String input) {
+        final String[] meta = input.split("\\s+");
+        if (meta.length == 1)
+            return input.equals("HELP?") || input.equals("TIME?") || input.equals("QUIT!");
+        else if (meta.length == 2)
+            return input.startsWith("LOAD?");
+        else if (meta.length == 3)
+            return input.startsWith("ACK? PM/") || input.startsWith("SHOW?");
+        else
+            return false;
+    }
+
     public void connect(String identifier, String host, int port) throws Exception {
         if (this.self == null) {
             this.socket = new Socket(host, port);
@@ -63,7 +75,10 @@ public class ClientController extends Thread {
     public void handleRequest(String input) {
         if (this.socket != null) {
             try {
-                new PrintWriter(this.socket.getOutputStream(), true).println(input);
+                if (this.isValidRequest(input))
+                    new PrintWriter(this.socket.getOutputStream(), true).println(input);
+                else
+                    this.disconnect();
                 this.ui.updateActivityArea(input, null);
             } catch (IOException e) {
                 e.printStackTrace();
