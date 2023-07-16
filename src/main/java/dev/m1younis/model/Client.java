@@ -63,7 +63,7 @@ public class Client extends Thread {
             .values()
             .forEach(message -> {
                 if (message.getCreated() >= since) {
-                    final String hash = message.getHash();
+                    final String hash = String.format("> %s", message.getHash());
                     if (content != null) {
                         if (message.toString().contains(content))
                             entries.add(hash);
@@ -129,10 +129,13 @@ public class Client extends Thread {
                         final Message target =
                             MessageController.loadStoredMessages().getOrDefault(meta[1], null);
                         if (target != null) {
-                            response = new StringJoiner("\n")
+                            meta = target.toString().split("\n");
+                            final StringJoiner sj = new StringJoiner("\n")
                                 .add("SUCCESS")
-                                .add(target.toString())
-                                .toString();
+                                .add(String.format("> %s", meta[0]));
+                            for (int i = 1; i < meta.length; i++)
+                                sj.add(String.format("> %s", meta[i]));
+                            response = sj.toString();
                         } else
                             response = "NOT FOUND";
                     } else
