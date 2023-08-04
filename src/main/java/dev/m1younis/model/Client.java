@@ -38,6 +38,10 @@ public class Client extends Thread {
     private static final String SHOW_REQUEST_HEADER_REGEX =
         "^SHOW\\?\\s(0|[1-9]\\d*)\\s[1-9]\\d*$";
 
+    // Required for validating requests and responses
+    private static final List<String> VALID_RESPONSES_META =
+        List.of("ACK?", "NOW", "NOT", "NONE");
+
     // Client's connection-specific fields
     private Socket socket;
     private String address,
@@ -88,14 +92,14 @@ public class Client extends Thread {
                 new PrintWriter(this.socket.getOutputStream(), true);
 
             // Protocol acknowledgement MUST occur prior to any communication
-            String message = String.format(
+            String dialog = String.format(
                 "%s %s",
                 PROTOCOL_ACK_MESSAGE,
                 this.peer ? this.socket.getLocalAddress() : this.identifier
             );
             boolean acknowledged = false;
-            writer.println(message);
-            this.ui.updateActivityArea(message, null);
+            writer.println(dialog);
+            this.ui.updateActivityArea(dialog, null);
 
             String request = reader.readLine();
             String[] meta = request.split("\\s+");
@@ -105,10 +109,10 @@ public class Client extends Thread {
                     this.identifier = meta[2];
                 if (protocol >= PROTOCOL_MIN_VERSION) {
                     acknowledged = true;
-                    message = String.format("%s (%s) joined", this.identifier, this.address);
-                    writer.println(message);
+                    dialog = String.format("%s (%s) joined", this.identifier, this.address);
+                    writer.println(dialog);
                     this.ui.updateActivityArea(request, this.identifier);
-                    this.ui.updateActivityArea(message, null);
+                    this.ui.updateActivityArea(dialog, null);
                 }
             }
 
@@ -190,11 +194,11 @@ public class Client extends Thread {
             if (this.identifier != null) {
                 if (acknowledged) {
                     this.ui.updateActivityArea(request, this.identifier);
-                    message = String.format("%s (%s) was kicked", this.identifier, this.address);
+                    dialog = String.format("%s (%s) was kicked", this.identifier, this.address);
                 } else
-                    message = String.format("%s (%s) left", this.identifier, this.address);
-                writer.println(message);
-                this.ui.updateActivityArea(message, null);
+                    dialog = String.format("%s (%s) left", this.identifier, this.address);
+                writer.println(dialog);
+                this.ui.updateActivityArea(dialog, null);
             }
             reader.close();
             writer.close();
