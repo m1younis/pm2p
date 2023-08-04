@@ -75,13 +75,23 @@ public class ClientController extends Thread {
     public void handleRequest(String input) {
         if (this.socket != null) {
             try {
-                if (this.isValidRequest(input))
+                if (this.isValidRequest(input)) {
+                    // Input meta can be operated on directly after validation
+                    final String[] meta = input.split("\\s+");
+                    // Multi-content `SHOW?` requests handled exclusively due to possible type
+                    // exceptions when parsing arguments
+                    if (meta[0].equals("SHOW?")) {
+                        Long.parseLong(meta[1]);
+                        Integer.parseInt(meta[2]);
+                    }
                     new PrintWriter(this.socket.getOutputStream(), true).println(input);
-                else
+                } else
                     this.disconnect();
                 this.ui.updateActivityArea(input, null);
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (NumberFormatException e) {
+                this.ui.displayMessage("Invalid `SHOW?` request, enter `HELP?` to learn more");
             }
         }
     }
