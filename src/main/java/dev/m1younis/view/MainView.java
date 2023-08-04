@@ -1,8 +1,7 @@
 
 package dev.m1younis.view;
 
-import dev.m1younis.controller.ClientController;
-import dev.m1younis.controller.MessageController;
+import dev.m1younis.controller.*;
 import dev.m1younis.model.Message;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -190,10 +189,6 @@ public class MainView extends BaseView {
             && Pattern.compile(PORT_NUM_REGEX).matcher(port).matches();
     }
 
-    private void displayMessage(String message) {
-        JOptionPane.showInternalMessageDialog(this.panel, message);
-    }
-
     private void clearConnectionPanel() {
         IDENTIFIER_FIELD.setText(null);
         IP_ADDRESS_FIELD.setText(null);
@@ -209,7 +204,7 @@ public class MainView extends BaseView {
         CONTENTS_AREA.setText(null);
         SENDER_FIELD.requestFocusInWindow();
     }
-    
+
     private boolean requiredMessageInfoSupplied() {
         return !SENDER_FIELD.getText().isBlank()
             && !CONTENTS_AREA.getText().isBlank();
@@ -217,6 +212,10 @@ public class MainView extends BaseView {
 
     public ClientController getController() {
         return this.controller;
+    }
+
+    public void displayMessage(String message) {
+        JOptionPane.showInternalMessageDialog(this.panel, message);
     }
 
     public void updateActivityArea(String text, String peer) {
