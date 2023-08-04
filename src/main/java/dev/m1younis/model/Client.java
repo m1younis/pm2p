@@ -97,107 +97,144 @@ public class Client extends Thread {
                 PROTOCOL_ACK_MESSAGE,
                 this.peer ? this.socket.getLocalAddress() : this.identifier
             );
-            boolean acknowledged = false;
             writer.println(dialog);
             this.ui.updateActivityArea(dialog, null);
 
             String request = reader.readLine();
-            String[] meta = request.split("\\s+");
-            if (meta.length == 3 && request.startsWith("ACK? PM/")) {
-                final int protocol = Integer.parseInt(meta[1].split("/")[1]);
-                if (this.peer)          // Overwrites client identifier given the thread is a peer
-                    this.identifier = meta[2];
-                if (protocol >= PROTOCOL_MIN_VERSION) {
-                    acknowledged = true;
-                    dialog = String.format("%s (%s) joined", this.identifier, this.address);
-                    writer.println(dialog);
-                    this.ui.updateActivityArea(request, this.identifier);
-                    this.ui.updateActivityArea(dialog, null);
+            boolean acknowledged = false;
+            while (!request.equals("QUIT!")) {
+                boolean isValid = true;        // Determines whether supplied request is valid
+                String[] meta = request.split("\\s+");
+                if (request.startsWith("ACK? PM/") && meta.length == 3) {
+                    final int protocol = Integer.parseInt(meta[1].split("/")[1]);
+                    // Client identifier recorded once peer agrees on protocol
+                    if (this.peer && this.identifier == null)
+                        this.identifier = meta[2];
+                    if (!acknowledged && protocol >= PROTOCOL_MIN_VERSION) {
+                        acknowledged = true;
+                        dialog = this.peer ?
+                            String.format("%s (%s) joined", this.identifier, this.address) :
+                            String.format("Connected to %s", this.address);
+                    } else
+                        break;
                 }
-            }
 
-            // Requests and responses can now be handled as the protocol is acknowledged between
-            // the client and peer
-            while (acknowledged) {
-                request = reader.readLine();
+                // Requests and responses can now be handled as the protocol is acknowledged
+                // between the client and connected peer
                 String response = null;
-                if (request.equals("QUIT!"))
-                    acknowledged = false;
-                else if (request.equals("HELP?"))
-                    response = String.join("\n", PROTOCOL_HELP_MESSAGE);
-                else if (request.equals("TIME?"))
-                    response = String.format("NOW %d", System.currentTimeMillis() / 1000);
-                else if (request.startsWith("LOAD?")) {
-                    meta = request.split("\\s+");
-                    if (meta.length == 2) {
-                        final Message target =
-                            MessageController.loadStoredMessages().getOrDefault(meta[1], null);
-                        if (target != null) {
-                            meta = target.toString().split("\n");
-                            final StringJoiner sj = new StringJoiner("\n")
-                                .add("SUCCESS")
-                                .add(String.format("> %s", meta[0]));
-                            for (int i = 1; i < meta.length; i++)
-                                sj.add(String.format("> %s", meta[i]));
-                            response = sj.toString();
-                        } else
-                            response = "NOT FOUND";
-                    } else
-                        break;
-                } else if (request.startsWith("SHOW?")) {
-                    meta = request.split("\\s+");
-                    if (meta.length == 3) {
-                        try {
-                            final long since = Long.parseLong(meta[1]);
-                            final int contents = Integer.parseInt(meta[2]);
-                            // `since` => non-negative + non-future, `headers` => non-negative
-                            if (since < System.currentTimeMillis() / 1000
-                                && since >= 0
-                                && contents >= 0) {
-                                if (contents != 0) {
-                                    this.ui.updateActivityArea(request, this.identifier);
-                                    // The number of lines in the content to search for in the
-                                    // message <==> `contents` and is compiled by a `StringJoiner`
-                                    // object
-                                    final StringJoiner sj = new StringJoiner("\n");
-                                    for (int i = 0; i < contents; i++) {
-                                        final String line = reader.readLine();
-                                        sj.add(line);
-                                        this.ui.updateActivityArea(line, this.identifier);
-                                    }
-                                    response = this.filterStoredMessages(since, sj.toString());
-                                } else
-                                    response = this.filterStoredMessages(since, null);
+                if (acknowledged) {
+                    if (request.equals("HELP?")) {
+                        response = String.join("\n", PROTOCOL_HELP_MESSAGE);
+                        writer.println(response);
+                    } else if (request.equals("TIME?")) {
+                        response = String.format("NOW %d", System.currentTimeMillis() / 1000);
+                        writer.println(response);
+                    } else if (request.startsWith("LOAD?")) {
+                        meta = request.split("\\s+");
+                        if (meta.length == 2) {
+                            final Message target =
+                                MessageController.loadStoredMessages().getOrDefault(meta[1], null);
+                            if (target != null) {
+                                meta = target.toString().split("\n");
+                                StringJoiner sj = new StringJoiner("\n")
+                                    .add("SUCCESS")
+                                    .add(String.format("> %s", meta[0]));
+                                for (int i = 1; i < meta.length; i++)
+                                    sj.add(String.format("> %s", meta[i]));
+                                response = sj.toString();
                             } else
-                                break;
-                        } catch (Exception e) {
+                                response = "NOT FOUND";
+                            writer.println(response);
+                        } else
                             break;
+                    } else if (request.startsWith("SHOW?")) {
+                        meta = request.split("\\s+");
+                        if (meta.length == 3) {
+                            try {
+                                final long since = Long.parseLong(meta[1]);
+                                final int contents = Integer.parseInt(meta[2]);
+                                // `since` => non-negative + non-future, `headers` => non-negative
+                                if (since < System.currentTimeMillis() / 1000
+                                    && since >= 0
+                                    && contents >= 0) {
+                                    if (contents != 0) {
+                                        this.ui.updateActivityArea(
+                                            request,
+                                            this.peer ? this.identifier : this.address
+                                        );
+                                        // The number of lines in the content to search for in the
+                                        // message <==> `contents` and is compiled by a
+                                        // `StringJoiner` object
+                                        final StringJoiner sj = new StringJoiner("\n");
+                                        for (int i = 0; i < contents; i++) {
+                                            final String line = reader.readLine();
+                                            sj.add(line);
+                                            this.ui.updateActivityArea(
+                                                line,
+                                                this.peer ? this.identifier : this.address
+                                            );
+                                        }
+                                        response = this.filterStoredMessages(since, sj.toString());
+                                    } else
+                                        response = this.filterStoredMessages(since, null);
+                                    writer.println(response);
+                                } else
+                                    break;
+                            } catch (Exception e) {
+                                break;
+                            }
+                        } else
+                            break;
+                    } else if (request.startsWith("PoliteMessaging")) {
+                        final StringJoiner sj = new StringJoiner("\n").add(request);
+                        for (int i = 0; i < PROTOCOL_HELP_MESSAGE.size() - 1; i++)
+                            sj.add(reader.readLine());
+                        request = sj.toString();
+                    } else if (request.startsWith("ENTRIES")) {
+                        final int count = Integer.parseInt(request.split("\\s+")[1]);
+                        final StringJoiner sj = new StringJoiner("\n").add(request);
+                        for (int i = 0; i < count; i++)
+                            sj.add(reader.readLine());
+                        request = sj.toString();
+                    } else {
+                        // Miscellaneous communications validated below
+                        final String toCheck = request.contains(" ") ?
+                            request.substring(0, request.indexOf(' ')) : request;
+                        if (!PROTOCOL_HELP_MESSAGE.contains(toCheck)
+                            && !VALID_RESPONSES_META.contains(toCheck))
+                            isValid = false;
+                    }
+
+                    if (isValid) {
+                        // All but non-zero header `SHOW?` requests are displayed in the activity
+                        // log immediately, since this is handled within the main loop
+                        if (!Pattern.compile(SHOW_REQUEST_HEADER_REGEX).matcher(request).matches())
+                        {
+                            this.ui.updateActivityArea(
+                                request,
+                                this.peer ? this.identifier : this.address
+                            );
                         }
+                        // Outputs successful connection dialog upon protocol acknowledgement
+                        if (meta[0].equals("ACK?"))
+                            this.ui.updateActivityArea(dialog, null);
+                        if (response != null)
+                            this.ui.updateActivityArea(response, null);
                     } else
                         break;
+                    request = reader.readLine();
                 } else
                     break;
-
-                if (response != null) {
-                    writer.println(response);
-                    // All but non-zero header `SHOW?` requests are displayed in the activity log
-                    // immediately since this is handled within the main loop
-                    if (!Pattern.compile(SHOW_REQUEST_HEADER_REGEX).matcher(request).matches())
-                        this.ui.updateActivityArea(request, this.identifier);
-                    this.ui.updateActivityArea(response, null);
-                } else
-                    this.ui.updateActivityArea(request, null);
             }
 
-            // Streams are closed promptly once communication ends or the protocol is broken due to
-            // an invalid request
+            // Streams are closed promptly once one party ends communication or the protocol breaks
+            // due to an invalid request being received
+            this.ui.updateActivityArea(request, this.peer ? this.identifier : this.address);
             if (this.identifier != null) {
-                if (acknowledged) {
-                    this.ui.updateActivityArea(request, this.identifier);
-                    dialog = String.format("%s (%s) was kicked", this.identifier, this.address);
-                } else
-                    dialog = String.format("%s (%s) left", this.identifier, this.address);
-                writer.println(dialog);
+                dialog = request.equals("QUIT!") ?
+                    String.format("%s (%s) left", this.identifier, this.address) :
+                    String.format("%s (%s) was kicked", this.identifier, this.address);
+                // Corresponding dialog displayed in activity log
                 this.ui.updateActivityArea(dialog, null);
             }
             reader.close();
