@@ -215,7 +215,8 @@ public class Client extends Thread {
                                 this.peer ? this.identifier : this.address
                             );
                         }
-                        // Outputs successful connection dialog upon protocol acknowledgement
+                        // Successful connection dialog shown in activity log upon protocol
+                        // acknowledgement
                         if (meta[0].equals("ACK?"))
                             this.ui.updateActivityArea(dialog, null);
                         if (response != null)
@@ -231,10 +232,16 @@ public class Client extends Thread {
             // due to an invalid request being received
             this.ui.updateActivityArea(request, this.peer ? this.identifier : this.address);
             if (this.identifier != null) {
-                dialog = request.equals("QUIT!") ?
-                    String.format("%s (%s) left", this.identifier, this.address) :
-                    String.format("%s (%s) was kicked", this.identifier, this.address);
-                // Corresponding dialog displayed in activity log
+                // Corresponding dialog formulated and displayed in activity log
+                if (request.equals("QUIT!")) {
+                    dialog = this.peer ?
+                        String.format("%s (%s) left", this.identifier, this.address) :
+                        String.format("%s left", this.address);
+                } else {
+                    dialog = this.peer ?
+                        String.format("%s (%s) kicked", this.identifier, this.address) :
+                        String.format("%s kicked", this.address);
+                }
                 this.ui.updateActivityArea(dialog, null);
             }
             reader.close();
