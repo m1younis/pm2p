@@ -27,6 +27,9 @@ public class ClientController extends Thread {
 
     private Client self = null;            // Instance for outgoing connections
 
+    // Registers the number of contents for client `SHOW?` requests
+    private int contentsCount = 0;
+
     public ClientController(MainView ui) {
         this.ui = ui;
         this.peers = new ArrayList<>();
@@ -39,15 +42,21 @@ public class ClientController extends Thread {
     }
 
     private boolean isValidRequest(String input) {
-        final String[] meta = input.split("\\s+");
-        if (meta.length == 1)
-            return input.equals("HELP?") || input.equals("TIME?") || input.equals("QUIT!");
-        else if (meta.length == 2)
-            return input.startsWith("LOAD?");
-        else if (meta.length == 3)
-            return input.startsWith("ACK? PM/") || input.startsWith("SHOW?");
-        else
-            return false;
+        // Skips validation on inputs for `SHOW?` contents by checking count value
+        if (this.contentsCount != 0) {
+            this.contentsCount--;
+            return true;
+        } else {
+            final String[] meta = input.split("\\s+");
+            if (meta.length == 1)
+                return input.equals("HELP?") || input.equals("TIME?") || input.equals("QUIT!");
+            else if (meta.length == 2)
+                return input.startsWith("LOAD?");
+            else if (meta.length == 3)
+                return input.startsWith("ACK? PM/") || input.startsWith("SHOW?");
+            else
+                return false;
+        }
     }
 
     public void connect(String identifier, String host, int port) throws Exception {
@@ -79,10 +88,10 @@ public class ClientController extends Thread {
                     // Input meta can be operated on directly after validation
                     final String[] meta = input.split("\\s+");
                     // Multi-content `SHOW?` requests handled exclusively due to possible type
-                    // exceptions when parsing arguments
+                    // exceptions being raised when parsing arguments
                     if (meta[0].equals("SHOW?")) {
                         Long.parseLong(meta[1]);
-                        Integer.parseInt(meta[2]);
+                        this.contentsCount = Integer.parseInt(meta[2]);
                     }
                     new PrintWriter(this.socket.getOutputStream(), true).println(input);
                 } else
