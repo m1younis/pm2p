@@ -82,6 +82,37 @@ public class Client extends Thread {
             .toString();
     }
 
+    private String storeLoadedMessage(BufferedReader reader) throws IOException {
+        // Message object exchanged via socket input stream once `LOAD?` request is completed
+        // Loaded message hash extracted
+        String line = reader.readLine();
+        final String hash = line.split("\\s+")[3];
+
+        // Headers and contents parsed
+        final StringJoiner sj = new StringJoiner("\n");
+        while (!line.startsWith("> Contents:")) {
+            sj.add(line);
+            line = reader.readLine();
+        }
+        sj.add(line);
+
+        final int contents = Integer.parseInt(line.split("\\s+")[2]);
+        for (int i = 0; i < contents; i++)
+            sj.add(reader.readLine());
+
+        // Message object is stored locally given it isn't already
+        final Message message =
+            MessageController.parseMessage(sj.toString().replace("> ", ""));
+        if (!MessageController.loadStoredMessages().containsKey(hash)) {
+            MessageController.storeMessage(message, true);
+            this.ui.displayMessage(
+                String.format("Message (%s) stored successfully", hash.substring(0, 7))
+            );
+        }
+
+        return String.join("\n", "SUCCESS", sj.toString());
+    }
+
     @Override
     public void run() {
         try {
@@ -190,7 +221,9 @@ public class Client extends Thread {
                         for (int i = 0; i < PROTOCOL_HELP_MESSAGE.size() - 1; i++)
                             sj.add(reader.readLine());
                         request = sj.toString();
-                    } else if (request.startsWith("ENTRIES")) {
+                    } else if (request.startsWith("SUCCESS"))
+                        request = this.storeLoadedMessage(reader);
+                    else if (request.startsWith("ENTRIES")) {
                         final int count = Integer.parseInt(request.split("\\s+")[1]);
                         final StringJoiner sj = new StringJoiner("\n").add(request);
                         for (int i = 0; i < count; i++)
