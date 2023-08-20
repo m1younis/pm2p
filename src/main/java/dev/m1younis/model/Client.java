@@ -83,12 +83,13 @@ public class Client extends Thread {
     }
 
     private String storeLoadedMessage(BufferedReader reader) throws IOException {
-        // Message object exchanged via socket input stream once `LOAD?` request is completed
+        // Message exchanged via socket input stream once `LOAD?` request is completed and built
+        // using a `StringJoiner`
         // Loaded message hash extracted
         String line = reader.readLine();
         final String hash = line.split("\\s+")[3];
 
-        // Headers and contents parsed
+        // Headers and contents parsed next
         final StringJoiner sj = new StringJoiner("\n");
         while (!line.startsWith("> Contents:")) {
             sj.add(line);
@@ -100,7 +101,7 @@ public class Client extends Thread {
         for (int i = 0; i < contents; i++)
             sj.add(reader.readLine());
 
-        // Message object is stored locally given it isn't already
+        // Loaded message is stored locally given it doesn't exist
         final Message message =
             MessageController.parseMessage(sj.toString().replace("> ", ""));
         if (!MessageController.loadStoredMessages().containsKey(hash)) {
