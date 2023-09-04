@@ -1,8 +1,7 @@
 
 package dev.m1younis;
 
-import dev.m1younis.controller.MessageController;
-import dev.m1younis.model.Message;
+import dev.m1younis.controller.DatabaseController;
 import dev.m1younis.view.MainView;
 import java.io.File;
 import java.io.IOException;
@@ -12,24 +11,13 @@ import java.io.IOException;
  */
 public class App {
     public static void main(String[] args) {
-        // The testing `Message` object is initialised to be stored (given the local storage file
-        // doesn't already exist) and displayed
-        final Message message = MessageController.parseMessage(
-            "Message-uid: SHA-256 5103d1029e1c05d5e0a72833fbe6ed727266f1f333a64c3af2243ae6c1918b65"
-            + "\nCreated: 1672766344"
-            + "\nFrom: @m1younis"
-            + "\nTopic: #testing"
-            + "\nContents: 6"
-            + "\nThis\nis\na\nmessage\nfor\ntesting!"
-        );
-
+        // Local database file is created and configured given it doesn't already exist
         try {
-            if (new File(MessageController.LOCAL_MESSAGES).createNewFile()) {
-                MessageController.storeMessage(message, false);
+            if (new File(DatabaseController.DATABASE_PATH).createNewFile()) {
+                DatabaseController.init();
                 System.out.printf(
-                    "`%s` created with initial message (%s)\n",
-                    MessageController.LOCAL_MESSAGES,
-                    message.getHash().substring(0, 7)
+                    "`%s` created and initialised\n",
+                    DatabaseController.DATABASE_PATH
                 );
             }
         } catch (IOException e) {
