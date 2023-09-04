@@ -105,7 +105,7 @@ public class Client extends Thread {
         final Message message =
             MessageController.parseMessage(sj.toString().replace("> ", ""));
         if (!MessageController.loadStoredMessages().containsKey(hash)) {
-            MessageController.storeMessage(message, true);
+            MessageController.storeMessage(message);
             this.ui.displayMessage(
                 String.format("Message (%s) stored successfully", hash.substring(0, 7))
             );

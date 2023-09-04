@@ -1,7 +1,8 @@
 
 package dev.m1younis.view;
 
-import dev.m1younis.controller.*;
+import dev.m1younis.controller.ClientController;
+import dev.m1younis.controller.MessageController;
 import dev.m1younis.model.Message;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -139,7 +140,7 @@ public class MainView extends BaseView {
                     subject.isEmpty() ? null : subject,
                     CONTENTS_AREA.getText().split("\\r?\\n")
                 );
-                MessageController.storeMessage(created, true);
+                MessageController.storeMessage(created);
                 this.displayMessage("Message created and stored successfully");
                 this.clearMessagePanel();
             } else

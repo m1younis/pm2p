@@ -2,30 +2,51 @@
 package dev.m1younis.controller;
 
 import dev.m1younis.model.Message;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * A class for handling operations on message objects.
  */
 public class MessageController {
-    public static final String LOCAL_MESSAGES = "src/main/resources/messages.txt";
-
-    public static void storeMessage(Message message, boolean append) {
+    public static void storeMessage(Message message) {
+        final Connection conn = DatabaseController.connect();
         try {
-            // The `append` parameter is used to distinguish between writing to the local storage
-            // file depending on whether it already exists
-            final FileWriter writer = new FileWriter(MessageController.LOCAL_MESSAGES, append);
-            writer.write(String.format("%s\n\n", message));
-            writer.close();
-        } catch (IOException e) {
+            // Optional message fields are extracted to check for nulls prior to insertion
+            final String recipient = message.getRecipient(),
+                             topic = message.getTopic(),
+                           subject = message.getSubject();
+
+            // `INSERT` query composed by way of a formatted string before being performed
+            final Statement stmt = conn.createStatement();
+            final String query = String.format(
+                "INSERT INTO `messages` (`uid`, `created`, `sender`, `recipient`, `topic`, "
+                + "`subject`, `contents`) VALUES ('%s', '%d', '%s', %s, %s, %s, '%s')",
+                message.getHash(),
+                message.getCreated(),
+                message.getSender(),
+                recipient == null ? "NULL" : String.format("'%s'", recipient),
+                topic == null ? "NULL" : String.format("'%s'", topic),
+                subject == null ? "NULL" : String.format("'%s'", subject),
+                String.join("\n", message.getContents())
+            );
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -82,23 +103,31 @@ public class MessageController {
         // over its base `HashMap` implementation and random-access counterpart `TreeMap` as
         // entries are chronologically contained or "insertion-ordered"
         final Map<String, Message> messages = new LinkedHashMap<>();
-
+        final Connection conn = DatabaseController.connect();
         try {
-            StringJoiner sj = new StringJoiner("\n");
-            final Scanner in = new Scanner(new File(MessageController.LOCAL_MESSAGES));
-            while (in.hasNextLine()) {
-                final String line = in.nextLine();
-                sj.add(line);
-                // Since locally stored `Message` objects are delimited by a blank line, the
-                // `StringJoiner` object used to parse them is reset when moving onto the next
-                if (line.isBlank()) {
-                    final Message message = MessageController.parseMessage(sj.toString());
-                    messages.put(message.getHash(), message);
-                    sj = new StringJoiner("\n");
-                }
+            // A `SELECT` query is executed to extract all message records and columns for which a
+            // `ResultSet` object is returned to be iterated over
+            final Statement stmt = conn.createStatement();
+            final ResultSet rs =
+                stmt.executeQuery("SELECT * FROM `messages` ORDER BY `created`");
+
+            // Table rows are mapped to `Message` objects then added within the `Map` container
+            while (rs.next()) {
+                final String hash = rs.getString("uid");
+                messages.put(
+                    hash,
+                    new Message(
+                        hash,
+                        rs.getString("sender"),
+                        rs.getString("recipient"),
+                        rs.getString("topic"),
+                        rs.getString("subject"),
+                        rs.getLong("created"),
+                        rs.getString("contents").split("\n")
+                    )
+                );
             }
-            in.close();
-        } catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
