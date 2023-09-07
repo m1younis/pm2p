@@ -30,9 +30,8 @@ same format as `sender`.
 - `Contents: <lines>` – this appears last in the overall body. `lines` is a positive integer used
 to determine how long the message contents are.
 
-Any unrecognised headers are ignored.
-[`messages.txt`](https://github.com/m1younis/pm2p/blob/master/src/main/resources/messages.txt)
-contains the initial example message which follows the format outlined above.
+Any unrecognised headers are ignored. `pm2p.db` is the SQLite database file containing the initial
+message which follows the format outlined above, as well as newly created instances.
 
 ## Requests & Responses
 
@@ -45,23 +44,14 @@ ACK? PM/<version> <identifier>
 
 No response is returned. `version` is a positive integer indicating the protocol version, the
 minimum value of which is 1. `identifier` is a string used to identify the connecting peer. The
-remaining request implementations are described as follows:
+remaining request implementations are described below.
 
-- `TIME?` – returns the current time at the peer in Unix Epoch, with the response displayed as
-<code>NOW <em>time</em></code>.
-
-- `LOAD? <hash>` – retrieves a stored message object associated with the SHA-256 sum `hash`. Given
-  the message exists at the peer, the response is shown in the form
-  <code>SUCCESS <em>message</em></code>, where both parts are divided by a new line. Otherwise,
-  `NOT FOUND` is returned.
-
-- `SHOW? <since> <headers>` – lists the SHA-256 sums of messages created on or after `since`
-  (a Unix Epoch time in the past) that contain the contents specified by `headers` (0 or more)
-  which gives the number of following lines for the content to match. The response is a combination
-  of <code>ENTRIES <em>count</em></code> followed by the resulting hash values on separate lines.
-  `NONE` is returned if no messages meet the conditions set.
-
-- `QUIT!` – (politely) ends the communication between two peers without giving a response.
+| Request | Description | Response |
+| ---: | --- | :--- |
+| `TIME?` | Returns the current time at the peer in Unix Epoch. | <code>NOW <em>time</em></code> |
+| `LOAD? <hash>` | Retrieves the stored message object associated with the given SHA-256 sum, `hash`. | <code>SUCCESS <em>message</em></code> is shown if the sum exists, separated by a new line. Otherwise, `NOT FOUND` is displayed. |
+| `SHOW? <since> <headers>` | Lists the SHA-256 sums of messages created on or after `since` (a Unix Epoch time in the past) that contain the contents specified by `headers` (0 or more) which gives the number of following lines for the content to match. | A combination of <code>ENTRIES <em>count</em></code> followed by the resulting hash values on separate lines. `NONE` is returned if no messages meet the conditions set. |
+| `QUIT!` | (Politely) ends communication between two peers. | *None* |
 
 The `HELP?` request provides a summary of all supported requests in a similar fashion to the above.
 If an invalid request is made, the sending peer's connection socket is closed and their interaction
