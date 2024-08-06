@@ -84,7 +84,7 @@ public abstract class BaseView extends JFrame {
 
     // UI datetime label formatting set
     private static final SimpleDateFormat
-        DATETIME_LABEL_FORMAT = new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss");
+        DATETIME_LABEL_FORMAT = new SimpleDateFormat("E, d MMM yyyy  |  HH:mm:ss");
 
     // Main panel housing all UI elements
     protected JPanel panel;
