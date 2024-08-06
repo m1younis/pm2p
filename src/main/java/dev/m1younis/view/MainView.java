@@ -86,15 +86,22 @@ public class MainView extends BaseView {
                         try {
                             this.controller.connect(identifier, host, port);
                         } catch (Exception e) {
-                            this.displayMessage("Error occurred trying to establish a connection");
+                            this.showMessageDialog(
+                                "Error occurred trying to establish a connection",
+                                2
+                            );
                             e.printStackTrace();
                         }
-                    } else
-                        this.displayMessage("Port number must be between 1 and 65535 inclusive");
+                    } else {
+                        this.showMessageDialog(
+                            "Port number must be between 1 and 65535 inclusive",
+                            2
+                        );
+                    }
                 } else
-                    this.displayMessage("Invalid IP address and/or port number submitted");
+                    this.showMessageDialog("Invalid IP address and/or port number submitted", 2);
             } else
-                this.displayMessage("Please fill in all the connection fields");
+                this.showMessageDialog("Please fill in all the connection fields", 2);
         });
 
         DISCONNECT_BUTTON.addActionListener(l -> {
@@ -134,18 +141,17 @@ public class MainView extends BaseView {
                                  topic = TOPIC_FIELD.getText().strip(),
                                subject = SUBJECT_FIELD.getText().strip();
                 // Message object created and stored locally
-                final Message created = new Message(
+                MessageController.storeMessage(new Message(
                     SENDER_FIELD.getText().strip(),
                     recipient.isEmpty() ? null : recipient,
                     topic.isEmpty() ? null : topic,
                     subject.isEmpty() ? null : subject,
                     CONTENTS_AREA.getText().split("\\r?\\n")
-                );
-                MessageController.storeMessage(created);
-                this.displayMessage("Message created and stored successfully");
+                ));
+                this.showMessageDialog("Message created and stored successfully", 1);
                 this.clearMessagePanel();
             } else
-                this.displayMessage("Please specify the message sender and/or contents");
+                this.showMessageDialog("Please specify the message sender and/or contents", 2);
         });
 
         // Activity panel elements defined
@@ -166,7 +172,7 @@ public class MainView extends BaseView {
                 this.controller.handleRequest(input);
                 REQUEST_FIELD.setText(null);
             } else
-                this.displayMessage("Please supply a valid request");
+                this.showMessageDialog("Please supply a valid request", 2);
             REQUEST_FIELD.requestFocusInWindow();
         });
 
@@ -216,8 +222,13 @@ public class MainView extends BaseView {
         return this.controller;
     }
 
-    public void displayMessage(String message) {
-        JOptionPane.showInternalMessageDialog(this.panel, message);
+    public void showMessageDialog(String message, int type) {
+        JOptionPane.showInternalMessageDialog(
+            this.panel,
+            message,
+            null,
+            type == 1 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE
+        );
     }
 
     public void updateActivityArea(String text, String peer) {
