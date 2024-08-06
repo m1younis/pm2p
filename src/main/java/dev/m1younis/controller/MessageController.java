@@ -2,8 +2,6 @@
 package dev.m1younis.controller;
 
 import dev.m1younis.model.Message;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
