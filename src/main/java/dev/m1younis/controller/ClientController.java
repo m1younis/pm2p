@@ -100,7 +100,10 @@ public class ClientController extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NumberFormatException e) {
-                this.ui.displayMessage("Invalid `SHOW?` request, enter `HELP?` to learn more");
+                this.ui.showMessageDialog(
+                    "Invalid `SHOW?` request, enter `HELP?` to learn more",
+                    2
+                );
             }
         }
     }

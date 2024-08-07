@@ -58,17 +58,17 @@ public class MainView extends BaseView {
         this.controller = new ClientController(this);      // Client handler startup
 
         // Connection panel elements defined
-        this.addLabel(new JLabel("Identifier"), true, 74, 66, 80, 22);
-        this.addLabel(new JLabel("IP Address"), true, 74, 94, 80, 22);
-        this.addLabel(new JLabel("Port"), true, 74, 122, 80, 22);
+        this.addLabel(new JLabel("Identifier"), true, 74, 61, 80, 22);
+        this.addLabel(new JLabel("IP Address"), true, 74, 91, 80, 22);
+        this.addLabel(new JLabel("Port"), true, 74, 119, 80, 22);
 
-        this.addTextField(IDENTIFIER_FIELD, true, 166, 66, 150, 22);
-        this.addTextField(IP_ADDRESS_FIELD, true, 166, 94, 150, 22);
-        this.addTextField(PORT_NUM_FIELD, true, 166, 122, 150, 22);
+        this.addTextField(IDENTIFIER_FIELD, true, 166, 63, 150, 22);
+        this.addTextField(IP_ADDRESS_FIELD, true, 166, 91, 150, 22);
+        this.addTextField(PORT_NUM_FIELD, true, 166, 119, 150, 22);
 
-        this.addButton(CLEAR_INFO_BUTTON, true, 102, 164, 100, 30);
-        this.addButton(CONNECT_BUTTON, true, 219, 164, 100, 30);
-        this.addButton(DISCONNECT_BUTTON, false, 336, 164, 100, 30);
+        this.addButton(CLEAR_INFO_BUTTON, true, 102, 161, 100, 30);
+        this.addButton(CONNECT_BUTTON, true, 219, 161, 100, 30);
+        this.addButton(DISCONNECT_BUTTON, false, 336, 161, 100, 30);
 
         CLEAR_INFO_BUTTON.addActionListener(l -> this.clearConnectionPanel());
 
@@ -86,15 +86,22 @@ public class MainView extends BaseView {
                         try {
                             this.controller.connect(identifier, host, port);
                         } catch (Exception e) {
-                            this.displayMessage("Error occurred trying to establish a connection");
+                            this.showMessageDialog(
+                                "Error occurred trying to establish a connection",
+                                2
+                            );
                             e.printStackTrace();
                         }
-                    } else
-                        this.displayMessage("Port number must be between 1 and 65535 inclusive");
+                    } else {
+                        this.showMessageDialog(
+                            "Port number must be between 1 and 65535 inclusive",
+                            2
+                        );
+                    }
                 } else
-                    this.displayMessage("Invalid IP address and/or port number submitted");
+                    this.showMessageDialog("Invalid IP address and/or port number submitted", 2);
             } else
-                this.displayMessage("Please fill in all the connection fields");
+                this.showMessageDialog("Please fill in all the connection fields", 2);
         });
 
         DISCONNECT_BUTTON.addActionListener(l -> {
@@ -103,27 +110,28 @@ public class MainView extends BaseView {
         });
 
         // Message panel elements defined
-        this.addLabel(new JLabel("Sender"), true, 30, 246, 60, 22);
-        this.addLabel(new JLabel("Recipient"), true, 232, 246, 60, 22);
-        this.addLabel(new JLabel("Topic"), true, 30, 278, 60, 22);
-        this.addLabel(new JLabel("Subject"), true, 232, 278, 60, 22);
-        this.addLabel(new JLabel("Contents"), true, 30, 316, 60, 22);
+        this.addLabel(new JLabel("Sender"), true, 30, 243, 60, 22);
+        this.addLabel(new JLabel("Recipient"), true, 232, 243, 60, 22);
+        this.addLabel(new JLabel("Topic"), true, 30, 275, 60, 22);
+        this.addLabel(new JLabel("Subject"), true, 232, 275, 60, 22);
+        this.addLabel(new JLabel("Contents"), true, 30, 313, 60, 22);
 
-        this.addTextField(SENDER_FIELD, true, 102, 246, 100, 22);
-        this.addTextField(RECIPIENT_FIELD, true, 304, 246, 100, 22);
-        this.addTextField(TOPIC_FIELD, true, 102, 278, 100, 22);
-        this.addTextField(SUBJECT_FIELD, true, 304, 278, 100, 22);
-        this.addTextArea(CONTENTS_AREA, 1, 102, 316, 302, 176);
+        this.addTextField(SENDER_FIELD, true, 102, 243, 100, 22);
+        this.addTextField(RECIPIENT_FIELD, true, 304, 243, 100, 22);
+        this.addTextField(TOPIC_FIELD, true, 102, 275, 100, 22);
+        this.addTextField(SUBJECT_FIELD, true, 304, 275, 100, 22);
+        this.addTextArea(CONTENTS_AREA, 1, 102, 313, 302, 176);
 
-        this.addButton(CLEAR_CONTENTS_BUTTON, true, 102, 508, 100, 30);
-        this.addButton(STORED_MESSAGES_BUTTON, true, 219, 508, 100, 30);
-        this.addButton(CREATE_MESSAGE_BUTTON, true, 336, 508, 100, 30);
+        this.addButton(CLEAR_CONTENTS_BUTTON, true, 102, 505, 100, 30);
+        this.addButton(STORED_MESSAGES_BUTTON, true, 219, 505, 100, 30);
+        this.addButton(CREATE_MESSAGE_BUTTON, true, 336, 505, 100, 30);
 
         CLEAR_CONTENTS_BUTTON.addActionListener(l -> this.clearMessagePanel());
 
-        STORED_MESSAGES_BUTTON.addActionListener(l ->
-            this.displayMessage("TODO: stored messages")
-        );
+        STORED_MESSAGES_BUTTON.addActionListener(l -> {
+            this.setVisible(false);
+            new MessageView(this);
+        });
 
         CREATE_MESSAGE_BUTTON.addActionListener(l -> {
             // Required message fields validated before creation
@@ -133,26 +141,25 @@ public class MainView extends BaseView {
                                  topic = TOPIC_FIELD.getText().strip(),
                                subject = SUBJECT_FIELD.getText().strip();
                 // Message object created and stored locally
-                final Message created = new Message(
+                MessageController.storeMessage(new Message(
                     SENDER_FIELD.getText().strip(),
                     recipient.isEmpty() ? null : recipient,
                     topic.isEmpty() ? null : topic,
                     subject.isEmpty() ? null : subject,
                     CONTENTS_AREA.getText().split("\\r?\\n")
-                );
-                MessageController.storeMessage(created);
-                this.displayMessage("Message created and stored successfully");
+                ));
+                this.showMessageDialog("Message created and stored successfully", 1);
                 this.clearMessagePanel();
             } else
-                this.displayMessage("Please specify the message sender and/or contents");
+                this.showMessageDialog("Please specify the message sender and/or contents", 2);
         });
 
         // Activity panel elements defined
-        this.addTextArea(ACTIVITY_AREA, 2, 460, 40, 742, 418);
-        this.addLabel(new JLabel("Request"), true, 504, 470, 65, 22);
-        this.addTextField(REQUEST_FIELD, false, 590, 470, 538, 22);
-        this.addButton(CLEAR_REQUEST_BUTTON, false, 983, 508, 100, 30);
-        this.addButton(SEND_REQUEST_BUTTON, false, 1100, 508, 100, 30);
+        this.addTextArea(ACTIVITY_AREA, 2, 460, 37, 742, 418);
+        this.addLabel(new JLabel("Request"), true, 504, 467, 65, 22);
+        this.addTextField(REQUEST_FIELD, false, 590, 467, 538, 22);
+        this.addButton(CLEAR_REQUEST_BUTTON, false, 983, 505, 100, 30);
+        this.addButton(SEND_REQUEST_BUTTON, false, 1100, 505, 100, 30);
 
         CLEAR_REQUEST_BUTTON.addActionListener(l -> {
             REQUEST_FIELD.setText(null);
@@ -165,16 +172,16 @@ public class MainView extends BaseView {
                 this.controller.handleRequest(input);
                 REQUEST_FIELD.setText(null);
             } else
-                this.displayMessage("Please supply a valid request");
+                this.showMessageDialog("Please supply a valid request", 2);
             REQUEST_FIELD.requestFocusInWindow();
         });
 
         // Live datetime label initialised alongside the connection, message and activity panels
         // Calling `setVisible` displays the frame once the constructor is invoked
-        this.handleDateTimeLabel(10, 6);
-        this.panel.add(this.createPanel(1, 0, 32, 450, 150));
-        this.panel.add(this.createPanel(2, 0, 210, 450, 316));
-        this.panel.add(this.createPanel(3, 450, 10, 761, 516));
+        this.handleDateTimeLabel(10, 4);
+        this.panel.add(this.createPanel(1, 0, 29, 450, 150));
+        this.panel.add(this.createPanel(2, 0, 207, 450, 316));
+        this.panel.add(this.createPanel(3, 450, 7, 761, 516));
         this.setVisible(true);
     }
 
@@ -215,8 +222,13 @@ public class MainView extends BaseView {
         return this.controller;
     }
 
-    public void displayMessage(String message) {
-        JOptionPane.showInternalMessageDialog(this.panel, message);
+    public void showMessageDialog(String message, int type) {
+        JOptionPane.showInternalMessageDialog(
+            this.panel,
+            message,
+            null,
+            type == 1 ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE
+        );
     }
 
     public void updateActivityArea(String text, String peer) {

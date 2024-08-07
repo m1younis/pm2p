@@ -72,11 +72,19 @@ public abstract class BaseView extends JFrame {
             TitledBorder.DEFAULT_POSITION,
             BORDER_FONT,
             Color.BLACK
+        ),
+        STORED_MESSAGES_BORDER = BorderFactory.createTitledBorder(
+            BASE_BORDER,
+            "Stored Messages",
+            TitledBorder.DEFAULT_JUSTIFICATION,
+            TitledBorder.DEFAULT_POSITION,
+            BORDER_FONT,
+            Color.BLACK
         );
 
     // UI datetime label formatting set
     private static final SimpleDateFormat
-        DATETIME_LABEL_FORMAT = new SimpleDateFormat("E, MMM dd yyyy HH:mm:ss");
+        DATETIME_LABEL_FORMAT = new SimpleDateFormat("E, d MMM yyyy  |  HH:mm:ss");
 
     // Main panel housing all UI elements
     protected JPanel panel;
@@ -202,13 +210,16 @@ public abstract class BaseView extends JFrame {
         component.setBounds(x, y, width, height);
         component.setBackground(BASE_COLOUR);
 
-        // 1 => connection panel, 2 => message panel, 3 => activity panel
+        // 1 => connection panel, 2 => message panel, 3 => activity panel,
+        // 4 => stored messages panel
         if (type == 1)
             component.setBorder(CONNECTION_BORDER);
         else if (type == 2)
             component.setBorder(MESSAGE_BORDER);
         else if (type == 3)
             component.setBorder(ACTIVITY_BORDER);
+        else if (type == 4)
+            component.setBorder(STORED_MESSAGES_BORDER);
 
         return component;
     }
